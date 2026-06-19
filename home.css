@@ -1,0 +1,175 @@
+/* ============================================
+   HERO
+   ============================================ */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  position: relative;
+  padding-top: 6rem;
+  background:
+    radial-gradient(ellipse 80% 50% at 50% -10%, rgba(194,64,28,0.16), transparent);
+}
+
+.hero-inner { max-width: 760px; }
+
+.hero-title {
+  font-size: clamp(2.6rem, 7vw, 5.2rem);
+  margin: 1.2rem 0 1.6rem;
+}
+
+.hero-title em {
+  font-style: italic;
+  color: var(--accent);
+}
+
+.hero-sub {
+  font-size: 1.05rem;
+  max-width: 42ch;
+  margin-bottom: 2.2rem;
+}
+
+.hero-actions { display: flex; gap: 1rem; flex-wrap: wrap; }
+
+.hero-frame-number {
+  position: absolute;
+  bottom: 2.5rem;
+  right: var(--gutter);
+  color: var(--text-dim);
+}
+
+@media (max-width: 720px) {
+  .hero-frame-number { display: none; }
+}
+
+/* ============================================
+   SECTION HEAD (shared pattern)
+   ============================================ */
+.section-head { margin-bottom: 3.5rem; }
+.section-head h2 { font-size: clamp(2rem, 4vw, 2.8rem); margin-top: 0.6rem; }
+
+/* ============================================
+   PROOF SHEET GRID
+   ============================================ */
+.sheet-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+}
+
+.frame {
+  margin: 0;
+  background: var(--bg);
+  position: relative;
+  overflow: hidden;
+}
+
+.frame-img {
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  background: linear-gradient(135deg, var(--bg-elevated) 0%, var(--bg-elevated-2) 100%);
+  position: relative;
+  transition: transform 0.6s var(--ease);
+}
+
+.frame-img::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    repeating-linear-gradient(45deg, rgba(237,234,227,0.03) 0 2px, transparent 2px 12px);
+}
+
+.frame:hover .frame-img { transform: scale(1.03); }
+
+.frame figcaption {
+  padding: 0.7rem 0.9rem;
+  border-top: 1px solid var(--border);
+}
+
+.frame-lg { grid-column: span 3; }
+.frame-md { grid-column: span 2; }
+.frame-sm { grid-column: span 1; aspect-ratio: 1; }
+.frame-sm .frame-img { aspect-ratio: 1; }
+
+.ph-1 { background: linear-gradient(135deg, #2a1c16, #14100d); }
+.ph-2 { background: linear-gradient(135deg, #1c1d22, #0d0e10); }
+.ph-3 { background: linear-gradient(135deg, #23211c, #100f0d); }
+.ph-4 { background: linear-gradient(135deg, #281612, #120907); }
+.ph-5 { background: linear-gradient(135deg, #1a1f1c, #0c0e0d); }
+.ph-6 { background: linear-gradient(135deg, #15181f, #08090c); }
+
+.sheet-note {
+  margin-top: 1.5rem;
+  text-align: right;
+}
+
+@media (max-width: 880px) {
+  .sheet-grid { grid-template-columns: repeat(2, 1fr); }
+  .frame-lg, .frame-md { grid-column: span 2; }
+  .frame-sm { grid-column: span 1; }
+}
+
+/* ============================================
+   PRACTICE / BUSINESS SECTION
+   ============================================ */
+.practice-grid {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  gap: 4rem;
+  align-items: start;
+}
+
+.practice-text h2 { font-size: clamp(1.8rem, 3.4vw, 2.6rem); margin: 1rem 0 1.4rem; }
+
+.practice-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2.2rem;
+}
+
+.practice-list li {
+  display: flex;
+  gap: 1.2rem;
+  border-top: 1px solid var(--border);
+  padding-top: 1.4rem;
+}
+
+.practice-num { color: var(--accent); padding-top: 0.3rem; }
+
+.practice-list h3 {
+  font-size: 1.15rem;
+  margin-bottom: 0.4rem;
+  font-family: var(--font-body);
+  font-weight: 600;
+}
+
+.practice-list p { margin: 0; max-width: 30ch; }
+
+@media (max-width: 880px) {
+  .practice-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+}
+
+/* ============================================
+   CTA BAND
+   ============================================ */
+.cta-band {
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-elevated);
+}
+
+.cta-inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 2rem;
+}
+
+.cta-inner h2 { font-size: clamp(1.8rem, 4vw, 2.6rem); }
