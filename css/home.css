@@ -94,12 +94,12 @@
 .frame-sm { grid-column: span 1; aspect-ratio: 1; }
 .frame-sm .frame-img { aspect-ratio: 1; }
 
-.ph-1 { background: linear-gradient(135deg, #2a1c16, #14100d); }
-.ph-2 { background: linear-gradient(135deg, #1c1d22, #0d0e10); }
-.ph-3 { background: linear-gradient(135deg, #23211c, #100f0d); }
-.ph-4 { background: linear-gradient(135deg, #281612, #120907); }
-.ph-5 { background: linear-gradient(135deg, #1a1f1c, #0c0e0d); }
-.ph-6 { background: linear-gradient(135deg, #15181f, #08090c); }
+.ph-1 { background-image: url('../images/photo1.jpg') }
+.ph-2 { background-image: url('../images/photo2.jpg') }
+.ph-3 { background-image: url('../images/photo3.jpg') }
+.ph-4 { background-image: url('../images/photo4.jpg') }
+.ph-5 { background-image: url('../images/photo5.jpg') }
+.ph-6 { background-image: url('../images/photo6.jpg') }
 
 .sheet-note {
   margin-top: 1.5rem;
