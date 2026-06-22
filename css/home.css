@@ -94,12 +94,12 @@
 .frame-sm { grid-column: span 1; aspect-ratio: 1; }
 .frame-sm .frame-img { aspect-ratio: 1; }
 
-.ph-1 { background-image: url('../images/photo1.jpg') }
-.ph-2 { background-image: url('../images/photo2.jpg') }
-.ph-3 { background-image: url('../images/photo3.jpg') }
-.ph-4 { background-image: url('../images/photo4.jpg') }
-.ph-5 { background-image: url('../images/photo5.jpg') }
-.ph-6 { background-image: url('../images/photo6.jpg') }
+.ph-1 { background-image: url('../images/photo1.JPG') }
+.ph-2 { background-image: url('../images/photo2.JPG') }
+.ph-3 { background-image: url('../images/photo3.JPG') }
+.ph-4 { background-image: url('../images/photo4.JPG') }
+.ph-5 { background-image: url('../images/photo5.JPG') }
+.ph-6 { background-image: url('../images/photo6.JPG') }
 
 .sheet-note {
   margin-top: 1.5rem;
