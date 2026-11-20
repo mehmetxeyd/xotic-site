@@ -1,13 +1,3 @@
-.page-header {
-  padding: 9rem 0 3rem;
-}
-
-.page-title {
-  font-size: clamp(2.2rem, 5.5vw, 3.6rem);
-  margin-top: 1rem;
-  max-width: 16ch;
-}
-
 /* ============================================
    BIO
    ============================================ */
@@ -70,3 +60,6 @@
 @media (max-width: 880px) {
   .approach-grid { grid-template-columns: 1fr; }
 }
+
+.inline-link { color: var(--text); border-bottom: 1px solid var(--accent); transition: color 0.2s; }
+.inline-link:hover { color: var(--accent); }

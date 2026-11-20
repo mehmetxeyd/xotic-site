@@ -1,0 +1,14 @@
+// Cloudflare Workers config for xotic.dev (static assets only, no server code).
+// If a deploy ever fails because of this file, deleting it restores the old behaviour.
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "xotic-site",
+  "compatibility_date": "2026-06-19",
+  "assets": {
+    "directory": "./",
+    // Serve 404.html (with a real 404 status) for unknown URLs
+    "not_found_handling": "404-page",
+    // /work serves work.html
+    "html_handling": "auto-trailing-slash"
+  }
+}

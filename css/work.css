@@ -1,0 +1,141 @@
+/* ============================================
+   FEATURED CASE STUDY
+   ============================================ */
+.featured { padding-top: 1rem; }
+
+.case {
+  border: 1px solid var(--border);
+  background:
+    radial-gradient(ellipse 60% 80% at 100% 0%, var(--accent-soft), transparent 70%),
+    var(--bg-elevated);
+  padding: clamp(1.6rem, 4vw, 3.2rem);
+  display: grid;
+  grid-template-columns: 1.15fr 1fr;
+  gap: 3rem 4rem;
+}
+
+.case-head h2 { font-size: clamp(1.9rem, 4vw, 2.9rem); margin: 0.8rem 0 1.2rem; max-width: 14ch; }
+.case-index { color: var(--accent); margin: 0; }
+.case-summary { max-width: 50ch; font-size: 1.02rem; margin-bottom: 1.6rem; }
+.case-links { display: flex; gap: 0.8rem; flex-wrap: wrap; margin-top: 2rem; }
+
+.case-steps {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1.6rem;
+  align-self: center;
+}
+
+.case-steps li { border-top: 1px solid var(--border-strong); padding-top: 1rem; }
+.case-steps .mono-caption { color: var(--text); }
+.case-steps p { margin: 0.5rem 0 0; max-width: 44ch; }
+
+code {
+  font-family: var(--font-mono);
+  font-size: 0.86em;
+  color: var(--text);
+  background: rgba(237, 234, 227, 0.06);
+  padding: 0.1em 0.35em;
+  border-radius: 2px;
+}
+
+.case-foot {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  border-top: 1px solid var(--border);
+  padding-top: 1.4rem;
+}
+
+.case-foot > .mono-caption { margin: 0; }
+
+.program-id {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.8rem;
+  max-width: 100%;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 0.5rem 0.8rem;
+  border-radius: 2px;
+  cursor: pointer;
+  transition: border-color 0.2s;
+}
+
+.program-id:hover { border-color: var(--accent); }
+.program-id code { background: none; padding: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }
+.program-id .copy-label { color: var(--accent); flex-shrink: 0; }
+
+@media (max-width: 880px) {
+  .case { grid-template-columns: minmax(0, 1fr); }
+}
+
+/* ============================================
+   PROJECT GRID
+   ============================================ */
+.project-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+}
+
+.project {
+  background: var(--bg);
+  padding: 2.2rem;
+  display: flex;
+  flex-direction: column;
+  transition: background 0.3s var(--ease);
+}
+
+.project:hover { background: var(--bg-elevated); }
+.project > .mono-caption { margin: 0 0 0.8rem; }
+.project h3 { font-size: 1.6rem; margin-bottom: 0.8rem; }
+.project > p:not(.mono-caption) { max-width: 44ch; }
+.project .tags { margin: 0.4rem 0 1.6rem; }
+.project-links { display: flex; gap: 1.4rem; margin-top: auto; }
+
+@media (max-width: 720px) {
+  .project-grid { grid-template-columns: 1fr; }
+  .project { padding: 1.6rem; }
+}
+
+/* ============================================
+   LIVE REPO LIST
+   ============================================ */
+.repo-list { list-style: none; margin: 0 0 2rem; padding: 0; border-top: 1px solid var(--border); }
+
+.repo-list a {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  align-items: baseline;
+  gap: 1.5rem;
+  padding: 1.2rem 0;
+  border-bottom: 1px solid var(--border);
+  transition: padding 0.3s var(--ease), color 0.2s;
+}
+
+.repo-list a:hover { padding-left: 0.8rem; }
+.repo-list a:hover .repo-name { color: var(--accent); }
+
+.repo-name { font-family: var(--font-display); font-size: 1.25rem; transition: color 0.2s; }
+.repo-desc { display: block; font-size: 0.9rem; color: var(--text-dim); margin-top: 0.25rem; }
+.repo-list .mono-caption { white-space: nowrap; }
+.repo-empty { padding: 1.2rem 0; border-bottom: 1px solid var(--border); }
+
+@media (max-width: 720px) {
+  .repo-list a { grid-template-columns: 1fr auto; }
+  .repo-updated { display: none; }
+}
+
+.repos-actions { display: flex; align-items: center; gap: 1.6rem; flex-wrap: wrap; }
+.repos-actions .btn[disabled] { opacity: 0.6; cursor: default; }
+.repos-note { margin-top: 1rem; max-width: none; }
+.repos-note .text-link { font-size: inherit; }
