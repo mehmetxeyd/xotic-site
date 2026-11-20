@@ -134,3 +134,8 @@ code {
   .repo-list a { grid-template-columns: 1fr auto; }
   .repo-updated { display: none; }
 }
+
+.repos-actions { display: flex; align-items: center; gap: 1.6rem; flex-wrap: wrap; }
+.repos-actions .btn[disabled] { opacity: 0.6; cursor: default; }
+.repos-note { margin-top: 1rem; max-width: none; }
+.repos-note .text-link { font-size: inherit; }

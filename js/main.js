@@ -1,27 +1,24 @@
+const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+
 // Mobile nav toggle
 const navToggle = document.querySelector('.nav-toggle');
 const navLinks = document.querySelector('.nav-links');
 
 if (navToggle && navLinks) {
-  navToggle.addEventListener('click', () => {
-    navLinks.classList.toggle('open');
-    const isOpen = navLinks.classList.contains('open');
-    navToggle.setAttribute('aria-expanded', isOpen);
-    navToggle.textContent = isOpen ? 'Close' : 'Menu';
-  });
-
-  navLinks.querySelectorAll('a').forEach(link => {
-    link.addEventListener('click', () => {
-      navLinks.classList.remove('open');
-      navToggle.textContent = 'Menu';
-    });
-  });
+  const setOpen = (open) => {
+    navLinks.classList.toggle('open', open);
+    navToggle.setAttribute('aria-expanded', open);
+    navToggle.textContent = open ? 'Close' : 'Menu';
+  };
+  navToggle.addEventListener('click', () => setOpen(!navLinks.classList.contains('open')));
+  navLinks.querySelectorAll('a').forEach(link => link.addEventListener('click', () => setOpen(false)));
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') setOpen(false); });
 }
 
 // Scroll reveal
 const revealEls = document.querySelectorAll('.reveal');
-
-if ('IntersectionObserver' in window) {
+if ('IntersectionObserver' in window && !reduceMotion) {
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
@@ -29,8 +26,7 @@ if ('IntersectionObserver' in window) {
         observer.unobserve(entry.target);
       }
     });
-  }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
-
+  }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
   revealEls.forEach(el => observer.observe(el));
 } else {
   revealEls.forEach(el => el.classList.add('is-visible'));
@@ -39,11 +35,59 @@ if ('IntersectionObserver' in window) {
 // Mark active nav link
 const currentPath = window.location.pathname.split('/').pop() || 'index.html';
 document.querySelectorAll('.nav-links a').forEach(link => {
-  const linkPath = link.getAttribute('href');
-  if (linkPath === currentPath || (currentPath === '' && linkPath === 'index.html')) {
+  const href = link.getAttribute('href');
+  if (href === currentPath || href.replace('.html', '') === currentPath) {
     link.classList.add('active');
+    link.setAttribute('aria-current', 'page');
   }
 });
+
+// Scroll progress bar
+const progress = document.querySelector('.scroll-progress');
+if (progress) {
+  const update = () => {
+    const max = document.documentElement.scrollHeight - window.innerHeight;
+    progress.style.transform = 'scaleX(' + (max > 0 ? window.scrollY / max : 0) + ')';
+  };
+  window.addEventListener('scroll', update, { passive: true });
+  update();
+}
+
+// Pointer effects (desktop only, off for reduced motion)
+if (finePointer && !reduceMotion) {
+  // 3D tilt
+  document.querySelectorAll('[data-tilt]').forEach(el => {
+    const max = 6;
+    el.addEventListener('pointerenter', () => { el.style.transitionDelay = '0s'; });
+    el.addEventListener('pointermove', e => {
+      const r = el.getBoundingClientRect();
+      const x = (e.clientX - r.left) / r.width - 0.5;
+      const y = (e.clientY - r.top) / r.height - 0.5;
+      el.style.transform = `perspective(900px) rotateX(${(-y * max).toFixed(2)}deg) rotateY(${(x * max).toFixed(2)}deg) translateY(-4px)`;
+    });
+    el.addEventListener('pointerleave', () => { el.style.transform = ''; });
+  });
+
+  // Cursor glow
+  document.querySelectorAll('[data-glow]').forEach(el => {
+    el.addEventListener('pointermove', e => {
+      const r = el.getBoundingClientRect();
+      el.style.setProperty('--gx', (e.clientX - r.left) + 'px');
+      el.style.setProperty('--gy', (e.clientY - r.top) + 'px');
+    });
+  });
+
+  // Magnetic buttons
+  document.querySelectorAll('[data-magnetic]').forEach(el => {
+    el.addEventListener('pointermove', e => {
+      const r = el.getBoundingClientRect();
+      const x = e.clientX - r.left - r.width / 2;
+      const y = e.clientY - r.top - r.height / 2;
+      el.style.transform = `translate(${x * 0.18}px, ${y * 0.3}px)`;
+    });
+    el.addEventListener('pointerleave', () => { el.style.transform = ''; });
+  });
+}
 
 // Contact form — sends via Web3Forms (see contact.html for setup)
 const contactForm = document.querySelector('#contact-form');

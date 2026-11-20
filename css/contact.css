@@ -83,4 +83,8 @@
 .form-status.is-error { color: var(--accent); }
 .form-status.is-success { color: var(--text); }
 .contact-form .btn[disabled] { opacity: 0.6; cursor: progress; }
-.field input:invalid:not(:placeholder-shown):not(:focus) { border-color: var(--accent); }
+.field input:user-invalid, .field textarea:user-invalid { border-color: var(--accent); }
+
+.consent { display: flex; gap: 0.8rem; align-items: flex-start; font-size: 0.86rem; color: var(--text-dim); line-height: 1.5; cursor: pointer; }
+.consent input { margin-top: 0.25rem; accent-color: var(--accent); width: 1rem; height: 1rem; flex-shrink: 0; }
+.consent a { color: var(--text); border-bottom: 1px solid var(--accent); }

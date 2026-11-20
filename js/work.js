@@ -49,22 +49,34 @@
   }
 
   function fail() {
-    list.textContent = '';
-    list.append(el('li', 'repo-empty mono-caption', 'Couldn’t reach GitHub right now. Use the link below.'));
+    const note = document.querySelector('.repos-note');
+    if (note) note.textContent = 'Couldn’t reach GitHub right now. Showing the saved list.';
   }
 
+  const btn = document.querySelector('#load-repos');
+
+  function load() {
+    if (btn) { btn.disabled = true; btn.textContent = 'Loading…'; }
+    fetch('https://api.github.com/users/' + encodeURIComponent(user) + '/repos?per_page=100&sort=pushed')
+      .then(res => { if (!res.ok) throw new Error(res.status); return res.json(); })
+      .then(repos => {
+        render(repos);
+        try { sessionStorage.setItem(cacheKey, JSON.stringify(repos)); } catch (e) { /* ignore */ }
+        if (btn) btn.textContent = 'Live from GitHub ✓';
+      })
+      .catch(() => { fail(); if (btn) { btn.disabled = false; btn.textContent = 'Try again'; } });
+  }
+
+  // Only contact GitHub after the visitor asks (privacy: no third-party request by default)
   try {
     const cached = sessionStorage.getItem(cacheKey);
-    if (cached) { render(JSON.parse(cached)); return; }
+    if (cached) {
+      render(JSON.parse(cached));
+      if (btn) { btn.disabled = true; btn.textContent = 'Live from GitHub ✓'; }
+    }
   } catch (e) { /* storage unavailable */ }
 
-  fetch('https://api.github.com/users/' + encodeURIComponent(user) + '/repos?per_page=100&sort=pushed')
-    .then(res => { if (!res.ok) throw new Error(res.status); return res.json(); })
-    .then(repos => {
-      render(repos);
-      try { sessionStorage.setItem(cacheKey, JSON.stringify(repos)); } catch (e) { /* ignore */ }
-    })
-    .catch(fail);
+  if (btn) btn.addEventListener('click', load);
 })();
 
 // Copy-to-clipboard buttons
