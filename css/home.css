@@ -40,15 +40,18 @@
 .hero-meta p { margin: 0; }
 
 .hero-title {
-  font-size: clamp(3.4rem, min(10vw, 15vh), 10.5rem);
+  font-size: clamp(2.9rem, min(10.4vw, 19vh), 12rem);
   line-height: 0.84;
   margin: 1.4rem 0 2rem;
   font-weight: 900;
 }
 
 .hero-title .line { display: block; overflow: hidden; padding: 0.02em 0 0.06em; position: relative; }
-.hero-title .line-2 { overflow: visible; }
-.hero-title .line-2 .word { clip-path: inset(-10% -10% 0 -10%); }
+/* the underlined line can't clip (the pencil sits below it), so it fades up instead */
+.hero-title .line-u { overflow: visible; }
+.hero-title .line-u .word { transform: translateY(35%); opacity: 0; animation-name: word-fade; }
+@keyframes word-fade { to { transform: none; opacity: 1; } }
+.hero-title .u-wrap { position: relative; }
 .hero-title .word {
   display: inline-block;
   transform: translateY(105%);
@@ -59,12 +62,12 @@
 
 @keyframes word-up { to { transform: translateY(0); } }
 
-/* Grease-pencil stroke under "structure" */
+/* Grease-pencil stroke under "the street." */
 .pencil-underline {
   position: absolute;
-  left: 18%;
-  bottom: -0.04em;
-  width: min(62%, 980px);
+  left: -2%;
+  bottom: -0.1em;
+  width: 104%;
   height: 0.16em;
   overflow: visible;
   pointer-events: none;
@@ -161,7 +164,7 @@
   position: absolute;
   left: 50%;
   top: calc(100% + 1px);
-  font-family: var(--font-mono);
+  font-family: var(--font-mono); font-stretch: 125%; font-weight: 600;
   font-size: 0.5rem;
   color: var(--edge);
 }
@@ -193,6 +196,7 @@
   .hero-meta .mono-caption { display: none; }
   .strip-frames { grid-template-columns: repeat(3, 1fr); }
   .strip-frame:last-child { display: none; }
+  .strip-frame span { display: none; }
 }
 
 /* ============================================
@@ -264,7 +268,7 @@
 .filters { display: flex; flex-wrap: wrap; gap: 0.4rem; }
 
 .chip {
-  font-family: var(--font-mono);
+  font-family: var(--font-mono); font-stretch: 125%; font-weight: 600;
   font-size: 0.62rem;
   letter-spacing: 0.06em;
   text-transform: uppercase;
@@ -338,13 +342,41 @@
 .shot-btn:focus-visible .shot-overlay { transform: none; }
 .shot-title { font-family: var(--font-display); font-weight: 800; font-size: 1.3rem; text-transform: uppercase; letter-spacing: 0.01em; }
 
-/* grease-pencil select mark (added by home.js) */
-.shot .pencil-ring { inset: -5% -3.5%; width: 107%; height: 110%; z-index: 3; }
-.shot .pencil-ring path { stroke-width: 1.8; opacity: 0; transition: stroke-dashoffset 0.75s cubic-bezier(.7,0,.3,1), opacity 0s 0.75s; }
-.shot:hover .pencil-ring path,
-.shot:focus-within .pencil-ring path { stroke-dashoffset: 0; opacity: 1; transition: stroke-dashoffset 0.75s cubic-bezier(.7,0,.3,1), opacity 0s; }
+/* hover: viewfinder corners snap in, like focus locking (same idea as the logo) */
+.shot-btn::after {
+  content: '';
+  position: absolute;
+  inset: 12px;
+  z-index: 2;
+  pointer-events: none;
+  --c: rgba(237, 230, 214, 0.95);
+  background:
+    linear-gradient(var(--c), var(--c)) top left / 22px 2px,
+    linear-gradient(var(--c), var(--c)) top left / 2px 22px,
+    linear-gradient(var(--c), var(--c)) top right / 22px 2px,
+    linear-gradient(var(--c), var(--c)) top right / 2px 22px,
+    linear-gradient(var(--c), var(--c)) bottom left / 22px 2px,
+    linear-gradient(var(--c), var(--c)) bottom left / 2px 22px,
+    linear-gradient(var(--c), var(--c)) bottom right / 22px 2px,
+    linear-gradient(var(--c), var(--c)) bottom right / 2px 22px;
+  background-repeat: no-repeat;
+  opacity: 0;
+  transform: scale(1.06);
+  transition: opacity 0.25s, transform 0.45s cubic-bezier(.2,.8,.2,1);
+}
+.shot:hover .shot-btn::after,
+.shot-btn:focus-visible::after { opacity: 1; transform: none; }
 
-.sheet-note { margin-top: 2.4rem; text-align: right; max-width: none; }
+.sheet-foot {
+  margin-top: 2.4rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 1rem 2rem;
+}
+.sheet-foot .text-link { color: var(--text); }
+.sheet-note { margin: 0; max-width: none; }
 
 @media (max-width: 1000px) { .masonry { grid-template-columns: repeat(2, 1fr); } }
 @media (max-width: 560px) {
@@ -352,7 +384,6 @@
   .shot.tall { grid-row: auto; }
   .shot.tall .shot-btn img { aspect-ratio: 4 / 5; }
   .shot.wide .shot-btn img { aspect-ratio: 3 / 2; }
-  .sheet-note { text-align: left; }
 }
 
 @media (hover: none) {
@@ -399,7 +430,7 @@
   border: 1.5px solid var(--border-strong);
   color: var(--text);
   cursor: pointer;
-  font-family: var(--font-mono);
+  font-family: var(--font-mono); font-stretch: 125%; font-weight: 600;
   transition: border-color 0.2s, background 0.2s;
 }
 .lb-close:hover, .lb-nav:hover { border-color: var(--accent); background: var(--accent); color: #fff; }
@@ -518,4 +549,52 @@
   .strip-frame img { animation: none; filter: none; }
   .pencil-underline path, .strip .pencil-ring path { animation: none; stroke-dashoffset: 0; opacity: 1; }
   .ticker-track { animation: none; }
+}
+
+/* ============================================
+   INTRO
+   ============================================ */
+.intro { padding-bottom: 6rem; }
+
+.intro-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 0.75fr) minmax(0, 1.25fr);
+  gap: 4rem 5rem;
+  align-items: start;
+}
+
+.intro-mark { margin: 0; position: sticky; top: 7rem; }
+.intro-mark .mark-lg { width: 100%; max-width: 360px; height: auto; color: var(--text); }
+.intro-mark figcaption { margin-top: 1.4rem; max-width: 34ch; line-height: 1.7; }
+
+.intro-text .eyebrow { margin-bottom: 1.6rem; }
+.intro-lede {
+  font-size: clamp(1.7rem, 3.2vw, 2.6rem);
+  line-height: 1.15;
+  letter-spacing: -0.015em;
+  color: var(--text);
+  max-width: 24ch;
+  margin-bottom: 2rem;
+}
+.intro-lede em { color: var(--accent); font-style: normal; font-family: var(--font-display); font-weight: 900; letter-spacing: 0.01em; }
+.intro-text > p:not(.intro-lede):not(.eyebrow) { font-size: 1.15rem; max-width: 54ch; }
+
+.now {
+  margin: 2.6rem 0 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  border-top: 1.5px solid var(--text);
+}
+.now div { padding: 1rem 1rem 1rem 0; border-bottom: 1px solid var(--border-strong); }
+.now dt { margin-bottom: 0.35rem; color: var(--accent); }
+.now dd { margin: 0; color: var(--text); }
+
+@media (max-width: 880px) {
+  .intro-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+  .intro-mark { position: static; display: flex; gap: 1.4rem; align-items: center; }
+  .intro-mark .mark-lg { width: 120px; flex-shrink: 0; }
+  .intro-mark figcaption { margin: 0; }
+}
+@media (max-width: 480px) {
+  .now { grid-template-columns: 1fr; }
 }

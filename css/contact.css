@@ -37,7 +37,7 @@
 }
 
 .field label {
-  font-family: var(--font-mono);
+  font-family: var(--font-mono); font-stretch: 125%; font-weight: 600;
   font-size: 0.72rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;

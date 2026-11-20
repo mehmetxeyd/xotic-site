@@ -63,3 +63,6 @@
 
 .inline-link { color: var(--text); border-bottom: 1px solid var(--accent); transition: color 0.2s; }
 .inline-link:hover { color: var(--accent); }
+
+.portrait-photo { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; margin-bottom: 0.8rem; border: 1.5px solid var(--text); }
+.bio-portrait { margin: 0; }
