@@ -1,5 +1,4 @@
 const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
 
 // Mobile nav toggle
 const navToggle = document.querySelector('.nav-toggle');
@@ -51,42 +50,6 @@ if (progress) {
   };
   window.addEventListener('scroll', update, { passive: true });
   update();
-}
-
-// Pointer effects (desktop only, off for reduced motion)
-if (finePointer && !reduceMotion) {
-  // 3D tilt
-  document.querySelectorAll('[data-tilt]').forEach(el => {
-    const max = 6;
-    el.addEventListener('pointerenter', () => { el.style.transitionDelay = '0s'; });
-    el.addEventListener('pointermove', e => {
-      const r = el.getBoundingClientRect();
-      const x = (e.clientX - r.left) / r.width - 0.5;
-      const y = (e.clientY - r.top) / r.height - 0.5;
-      el.style.transform = `perspective(900px) rotateX(${(-y * max).toFixed(2)}deg) rotateY(${(x * max).toFixed(2)}deg) translateY(-4px)`;
-    });
-    el.addEventListener('pointerleave', () => { el.style.transform = ''; });
-  });
-
-  // Cursor glow
-  document.querySelectorAll('[data-glow]').forEach(el => {
-    el.addEventListener('pointermove', e => {
-      const r = el.getBoundingClientRect();
-      el.style.setProperty('--gx', (e.clientX - r.left) + 'px');
-      el.style.setProperty('--gy', (e.clientY - r.top) + 'px');
-    });
-  });
-
-  // Magnetic buttons
-  document.querySelectorAll('[data-magnetic]').forEach(el => {
-    el.addEventListener('pointermove', e => {
-      const r = el.getBoundingClientRect();
-      const x = e.clientX - r.left - r.width / 2;
-      const y = e.clientY - r.top - r.height / 2;
-      el.style.transform = `translate(${x * 0.18}px, ${y * 0.3}px)`;
-    });
-    el.addEventListener('pointerleave', () => { el.style.transform = ''; });
-  });
 }
 
 // Contact form — sends via Web3Forms (see contact.html for setup)

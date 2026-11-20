@@ -1,28 +1,14 @@
 (function () {
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const fine = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
 
-  // ---- Hero spotlight + floating stack parallax ----
-  const hero = document.querySelector('[data-spotlight]');
-  const cards = document.querySelectorAll('.stack-card[data-depth]');
-  if (hero && fine && !reduce) {
-    let raf = 0;
-    hero.addEventListener('pointermove', e => {
-      cancelAnimationFrame(raf);
-      raf = requestAnimationFrame(() => {
-        const r = hero.getBoundingClientRect();
-        const x = (e.clientX - r.left) / r.width;
-        const y = (e.clientY - r.top) / r.height;
-        hero.style.setProperty('--mx', (x * 100).toFixed(1) + '%');
-        hero.style.setProperty('--my', (y * 100).toFixed(1) + '%');
-        cards.forEach(c => {
-          const d = +c.dataset.depth;
-          c.style.setProperty('--px', ((x - 0.5) * d).toFixed(1));
-          c.style.setProperty('--py', ((y - 0.5) * d).toFixed(1));
-        });
-      });
-    });
-  }
+  // ---- Grease-pencil "select" mark on each gallery frame ----
+  const ring = '<svg class="pencil-ring" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">' +
+    '<path pathLength="1" d="M10 58 C 4 24, 38 4, 64 8 C 92 12, 99 40, 94 64 C 88 90, 56 98, 32 92 C 10 86, 2 64, 12 40 C 16 30, 24 22, 34 18"/></svg>';
+  document.querySelectorAll('#gallery .shot').forEach((s, i) => {
+    s.insertAdjacentHTML('beforeend', ring);
+    // vary each mark a little so they look hand-drawn
+    s.querySelector('.pencil-ring').style.transform = `rotate(${(i % 2 ? 1 : -1) * (1 + (i % 3))}deg)`;
+  });
 
   // ---- Gallery filters ----
   const shots = [...document.querySelectorAll('#gallery .shot')];
@@ -73,7 +59,7 @@
     img.src = btn.dataset.full;
     img.alt = thumb.alt;
     title.textContent = btn.querySelector('.shot-title').textContent;
-    meta.textContent = btn.querySelector('.shot-overlay .mono-caption').textContent;
+    meta.textContent = btn.closest('.shot').querySelector('figcaption').textContent.replace(/^\s*▸\s*\d+\s*/, '');
     count.textContent = String(idx + 1).padStart(2, '0') + ' / ' + String(list.length).padStart(2, '0');
     if (img.complete && img.naturalWidth) img.classList.add('loaded');
     // Preload neighbour
