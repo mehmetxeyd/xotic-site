@@ -3,18 +3,21 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Frame/Work — Photography &amp; Web Design</title>
-<meta name="description" content="Photography and web design. Car culture behind the lens, fast custom websites in the browser, and blockchain prototypes on the side.">
+<title>XOTIC — Car Photography &amp; Web Design</title>
+<meta name="description" content="XOTIC is the Berlin studio of Mehmet X: car photography, hand-built websites, and a few blockchain experiments on the side.">
 <link rel="canonical" href="https://xotic.dev/">
 <meta name="theme-color" content="#E9E3D5">
 <meta property="og:type" content="website">
-<meta property="og:site_name" content="Frame/Work">
-<meta property="og:title" content="Frame/Work — Photography &amp; Web Design">
-<meta property="og:description" content="Car culture behind the lens, fast custom websites in the browser.">
+<meta property="og:site_name" content="XOTIC">
+<meta property="og:title" content="XOTIC — Car Photography &amp; Web Design">
+<meta property="og:description" content="Shot on the street. Built in the browser. Car photography and web design from Berlin.">
 <meta property="og:url" content="https://xotic.dev/">
 <meta property="og:image" content="https://xotic.dev/images/og.jpg">
 <meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="favicon.ico" sizes="any">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="manifest" href="site.webmanifest">
 <link rel="preload" href="fonts/big-shoulders-display-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="css/fonts.css">
 <link rel="stylesheet" href="css/style.css">
@@ -25,7 +28,14 @@
 <div class="scroll-progress" aria-hidden="true"></div>
 
 <nav class="site-nav">
-  <a href="index.html" class="logo">FRAME<span>/</span>WORK</a>
+  <a href="index.html" class="logo" aria-label="XOTIC home">
+    <svg class="mark" viewBox="8 6 84 88" aria-hidden="true">
+    <defs><mask id="xm"><rect x="-10" y="-10" width="120" height="120" fill="#fff"/><polygon points="14,10 40,10 86,90 60,90" fill="#000" stroke="#000" stroke-width="9"/></mask></defs>
+    <g mask="url(#xm)"><polygon class="mk-b mk-b1" points="60,10 70,10 24,90 14,90"/><polygon class="mk-b mk-b2" points="76,10 86,10 40,90 30,90"/></g>
+    <polygon class="mk-a" points="14,10 40,10 86,90 60,90"/>
+    <circle class="mk-dot" cx="50" cy="50" r="6.5"/>
+    </svg><span>OTIC</span>
+  </a>
   <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false">Menu</button>
   <ul class="nav-links">
     <li><a href="index.html">Home</a></li>
@@ -39,32 +49,37 @@
 <main id="main">
 
 <!-- HERO: the page "develops" on load -->
+<!--
+  Headline alternatives (swap the two .line spans to try one):
+    "Shot on the street. Built in the browser."   <- current
+    "Fast cars. Clean code."
+    "I shoot what moves and build what loads."
+    "Chrome on the kerb. Code on the screen."
+    "Every frame is a layout."
+-->
 <header class="hero">
   <div class="container">
     <div class="hero-meta hero-in" style="--i:0">
-      <p class="eyebrow">Photography &amp; Web Design</p>
+      <p class="eyebrow">Car photography &amp; web design</p>
       <p class="mono-caption">Sheet 001 · Berlin · 52.50°N</p>
     </div>
 
-    <h1 class="hero-title" aria-label="I look at light and structure the same way.">
-      <span class="line"><span class="word" style="--i:1">I look</span> <span class="word" style="--i:2">at light</span></span>
-      <span class="line line-2"><span class="word" style="--i:3"><em>and</em></span> <span class="word" style="--i:4">structure</span>
-        <svg class="pencil-underline" viewBox="0 0 600 40" preserveAspectRatio="none" aria-hidden="true"><path pathLength="1" d="M6 26 C 120 12, 260 30, 380 18 S 560 14, 594 22"/></svg>
-      </span>
-      <span class="line"><span class="word" style="--i:5">the same</span> <span class="word" style="--i:6">way.</span></span>
+    <h1 class="hero-title" aria-label="Shot on the street. Built in the browser.">
+      <span class="line line-u"><span class="word" style="--i:1">Shot on</span> <span class="word u-wrap" style="--i:2">the street.<svg class="pencil-underline" viewBox="0 0 600 40" preserveAspectRatio="none" aria-hidden="true"><path pathLength="1" d="M6 26 C 120 12, 260 30, 380 18 S 560 14, 594 22"/></svg></span></span>
+      <span class="line"><span class="word" style="--i:3"><em>built in</em></span> <span class="word" style="--i:4">the browser.</span></span>
     </h1>
 
     <div class="hero-lower">
       <div class="hero-copy">
-        <p class="hero-sub hero-in" style="--i:7">I frame cars on the street and build websites in the browser, with the same eye for proportion, restraint and what to leave out.</p>
-        <div class="hero-actions hero-in" style="--i:8">
+        <p class="hero-sub hero-in" style="--i:6">Car photography and hand-built websites from Berlin. One person behind both: <strong>Mehmet&nbsp;X</strong>.</p>
+        <div class="hero-actions hero-in" style="--i:7">
           <a href="#work" class="btn btn-solid">View the frames</a>
           <a href="work.html" class="btn">See the builds</a>
         </div>
       </div>
 
       <!-- Film strip: frames go from negative to positive -->
-      <div class="strip darkroom hero-in" style="--i:6" aria-hidden="true">
+      <div class="strip darkroom hero-in" style="--i:5" aria-hidden="true">
         <div class="strip-edge mono-caption"><span>XOTIC 400</span><span>SAFETY FILM ▸</span></div>
         <div class="strip-frames">
           <div class="strip-frame" style="--f:0"><img src="images/photo2-sm.jpg" alt="" width="900" height="600"><span>14</span></div>
@@ -82,10 +97,39 @@
 <!-- TICKER -->
 <div class="ticker" aria-hidden="true">
   <div class="ticker-track">
-    <span>Photography</span><span class="o">Web Design</span><span>Solana</span><span class="o">Rust</span><span>Cloudflare</span><span class="o">Unity</span><span>Car Culture</span><span class="o">PKI</span>
-    <span>Photography</span><span class="o">Web Design</span><span>Solana</span><span class="o">Rust</span><span>Cloudflare</span><span class="o">Unity</span><span>Car Culture</span><span class="o">PKI</span>
+    <span>Photography</span><span class="o">Web Design</span><span>Berlin</span><span class="o">Car Culture</span><span>Solana</span><span class="o">Cloudflare</span><span>Street Meets</span><span class="o">Unity</span>
+    <span>Photography</span><span class="o">Web Design</span><span>Berlin</span><span class="o">Car Culture</span><span>Solana</span><span class="o">Cloudflare</span><span>Street Meets</span><span class="o">Unity</span>
   </div>
 </div>
+
+<!-- INTRO -->
+<section class="intro">
+  <div class="container intro-grid">
+    <figure class="intro-mark reveal">
+      <svg class="mark mark-lg mark-wait mark-play" viewBox="0 0 100 100" aria-hidden="true">
+        <defs><mask id="xm-lg"><rect x="-10" y="-10" width="120" height="120" fill="#fff"/><polygon points="14,10 40,10 86,90 60,90" fill="#000" stroke="#000" stroke-width="9"/></mask></defs>
+        <path class="mk-br" d="M4 20V4h16M80 4h16v16M96 80v16H80M20 96H4V80"/>
+        <g mask="url(#xm-lg)"><polygon class="mk-b mk-b1" points="60,10 70,10 24,90 14,90"/><polygon class="mk-b mk-b2" points="76,10 86,10 40,90 30,90"/></g>
+        <polygon class="mk-a" points="14,10 40,10 86,90 60,90"/>
+        <circle class="mk-dot" cx="50" cy="50" r="6.5"/>
+      </svg>
+      <figcaption class="mono-caption">The X: a solid stroke, a double racing stripe, a focus point in the middle and the viewfinder around it.</figcaption>
+    </figure>
+
+    <div class="intro-text">
+      <p class="eyebrow reveal">Hello</p>
+      <p class="intro-lede reveal">I'm Mehmet X. <em>XOTIC</em> is my one-person studio in Berlin, for car photography and websites built by hand.</p>
+      <p class="reveal">Most of my photos are taken where cars gather: meets, classic car days, the kerb outside a showroom on a Saturday afternoon. I'm rarely after the whole car. I look for the part people walk past, like a badge, a wing or a line of light along a door.</p>
+      <p class="reveal">The rest of the time I build websites. They're small, fast and written by hand, with no page builder underneath. The habits are the same as with the camera: crop hard, keep what matters, and make it load before anyone gets bored.</p>
+      <dl class="now reveal">
+        <div><dt class="mono-caption">Shooting</dt><dd>Berlin car meets &amp; classics</dd></div>
+        <div><dt class="mono-caption">Building</dt><dd>Fast static sites on Cloudflare</dd></div>
+        <div><dt class="mono-caption">Tinkering</dt><dd>Credential revocation on Solana</dd></div>
+        <div><dt class="mono-caption">Carrying</dt><dd>Canon EOS 4000D, 18–55mm</dd></div>
+      </dl>
+    </div>
+  </div>
+</section>
 
 <!-- GALLERY: the darkroom -->
 <section id="work" class="gallery-section darkroom">
@@ -147,7 +191,10 @@
         <figcaption class="mono-caption"><b>▸ 06</b> 55MM · F/5.6 · 1/80 · ISO 500</figcaption>
       </figure>
     </div>
-    <p class="sheet-note mono-caption reveal">Canon EOS 4000D · EF-S 18–55mm · Hover to mark a select · Click to open full screen</p>
+    <div class="sheet-foot reveal">
+      <a class="text-link" href="https://www.instagram.com/xotic_studios/" target="_blank" rel="noopener">More frames on Instagram · @xotic_studios ↗</a>
+      <p class="sheet-note mono-caption">Canon EOS 4000D · EF-S 18–55mm · Click any frame to open it full screen</p>
+    </div>
   </div>
 </section>
 
@@ -197,7 +244,7 @@
     <div class="teaser-grid">
       <a href="work.html#solana" class="teaser teaser-main reveal" style="--d:0">
         <span class="teaser-no">A</span>
-        <span class="mono-caption">Solana · Rust · PKI</span>
+        <span class="mono-caption">Solana · web3.js · PKI</span>
         <h3>Credential revocation on Solana</h3>
         <p>Certificate revocation status kept on-chain instead of on a CRL server. Anyone can check it, and no wallet is needed.</p>
         <span class="text-link">Read the case study →</span>
@@ -247,9 +294,10 @@
 
 <footer class="site-footer">
   <div class="footer-grid">
-    <p class="mono-caption">© 2026 Frame/Work. Photos may not be reused without permission.</p>
+    <p class="mono-caption">© 2026 XOTIC · Mehmet X, Berlin. Photos may not be reused without permission.</p>
     <ul class="footer-links">
-      <li><a href="mailto:info@xotic.dev">Email</a></li>
+      <li><a href="mailto:mehmet.xeyd@gmail.com">Email</a></li>
+      <li><a href="https://www.instagram.com/xotic_studios/" target="_blank" rel="noopener">Instagram</a></li>
       <li><a href="https://github.com/mehmetxeyd" target="_blank" rel="noopener">GitHub</a></li>
       <li><a href="imprint.html">Legal notice</a></li>
       <li><a href="privacy.html">Privacy</a></li>

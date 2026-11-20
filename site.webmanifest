@@ -1,0 +1,11 @@
+{
+  "name": "XOTIC",
+  "short_name": "XOTIC",
+  "icons": [
+    { "src": "/brand/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/brand/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ],
+  "theme_color": "#E9E3D5",
+  "background_color": "#12100D",
+  "display": "browser"
+}

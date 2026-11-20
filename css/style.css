@@ -18,7 +18,8 @@
 
   --font-display: 'Big Shoulders Display', 'Arial Narrow', sans-serif;
   --font-body: 'Newsreader', Georgia, serif;
-  --font-mono: 'Martian Mono', 'Courier New', monospace;
+  --font-mono: 'Archivo', 'Arial', sans-serif;   /* labels: used at font-stretch 125% */
+  --font-code: ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
 
   --container: 1320px;
   --gutter: clamp(1.1rem, 4vw, 3rem);
@@ -128,7 +129,7 @@ h1 em, h2 em {
 h3 { text-transform: none; }
 
 .eyebrow {
-  font-family: var(--font-mono);
+  font-family: var(--font-mono); font-stretch: 125%;
   font-size: 0.66rem;
   font-weight: 500;
   letter-spacing: 0.14em;
@@ -158,7 +159,7 @@ p {
 }
 
 .mono-caption {
-  font-family: var(--font-mono);
+  font-family: var(--font-mono); font-stretch: 125%; font-weight: 600;
   font-size: 0.62rem;
   letter-spacing: 0.06em;
   color: var(--text-dim);
@@ -196,13 +197,59 @@ p {
 .site-nav .logo {
   font-family: var(--font-display);
   font-weight: 900;
-  font-size: 1.45rem;
-  letter-spacing: 0.02em;
+  font-size: 1.7rem;
+  letter-spacing: 0.01em;
   line-height: 1;
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.03em;
 }
+/* X sized to the cap height of OTIC (0.8em) and sat on the same baseline */
+.site-nav .logo .mark { height: 0.88em; margin-bottom: -0.04em; align-self: baseline; }
 
-.site-nav .logo span { color: var(--accent); display: inline-block; transition: transform 0.5s var(--ease); }
-.site-nav .logo:hover span { transform: rotate(-24deg); }
+/* ============================================
+   THE MARK — an X built from a solid stroke and a
+   double racing stripe, with a focus point at the centre.
+   Load: stroke slices in, stripes race in, focus dot locks.
+   Hover: stripes pass through again, dot blinks.
+   ============================================ */
+.mark { width: auto; overflow: visible; display: block; }
+.mark .mk-a, .mark .mk-b { fill: currentColor; }
+.mark .mk-dot { fill: var(--accent); }
+.mark .mk-br { fill: none; stroke: currentColor; stroke-width: 3; }
+.mark .mk-a, .mark .mk-b, .mark .mk-dot { transform-box: fill-box; transform-origin: center; }
+.mark .mk-br { transform-box: view-box; transform-origin: 50% 50%; }
+
+.mark .mk-a   { animation: mk-slice 0.7s cubic-bezier(.7,0,.2,1) 0.1s both; }
+.mark .mk-b1  { animation: mk-race 0.6s cubic-bezier(.2,.8,.2,1) 0.45s both; }
+.mark .mk-b2  { animation: mk-race 0.6s cubic-bezier(.2,.8,.2,1) 0.55s both; }
+.mark .mk-dot { animation: mk-lock 0.5s cubic-bezier(.3,1.6,.5,1) 0.95s both, mk-blink 0.5s steps(2, jump-none) 1.5s 2; }
+.mark .mk-br  { animation: mk-focus 0.55s cubic-bezier(.2,.8,.2,1) 0s both; }
+
+@keyframes mk-slice { from { clip-path: inset(0 100% 100% 0); } to { clip-path: inset(0 0 0 0); } }
+@keyframes mk-race  { from { transform: translate(16px, -28px); opacity: 0; } to { transform: none; opacity: 1; } }
+@keyframes mk-lock  { from { transform: scale(0); } to { transform: scale(1); } }
+@keyframes mk-blink { 50% { opacity: 0.15; } }
+@keyframes mk-focus { from { transform: scale(1.35); opacity: 0; } to { transform: none; opacity: 1; } }
+
+@keyframes mk-pass {
+  0%   { transform: none; opacity: 1; }
+  45%  { transform: translate(-12px, 21px); opacity: 0; }
+  46%  { transform: translate(12px, -21px); opacity: 0; }
+  100% { transform: none; opacity: 1; }
+}
+.logo:hover .mk-b1, .mark-play:hover .mk-b1 { animation: mk-pass 0.55s cubic-bezier(.6,0,.3,1) both; }
+.logo:hover .mk-b2, .mark-play:hover .mk-b2 { animation: mk-pass 0.55s cubic-bezier(.6,0,.3,1) 0.07s both; }
+.logo:hover .mk-dot, .mark-play:hover .mk-dot { animation: mk-blink 0.3s steps(2, jump-none) 0.3s 2; }
+
+/* Large marks wait until scrolled into view (main.js adds .is-visible) */
+.mark-wait .mk-a, .mark-wait .mk-b, .mark-wait .mk-dot, .mark-wait .mk-br { animation-play-state: paused; }
+.mark-wait.is-visible .mk-a, .mark-wait.is-visible .mk-b,
+.mark-wait.is-visible .mk-dot, .mark-wait.is-visible .mk-br { animation-play-state: running; }
+
+@media (prefers-reduced-motion: reduce) {
+  .mark .mk-a, .mark .mk-b, .mark .mk-dot, .mark .mk-br { animation: none !important; }
+}
 
 .nav-links {
   display: flex;
@@ -213,7 +260,7 @@ p {
 }
 
 .nav-links a {
-  font-family: var(--font-mono);
+  font-family: var(--font-mono); font-stretch: 125%; font-weight: 600;
   font-size: 0.66rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -242,7 +289,7 @@ p {
   background: none;
   border: 1px solid var(--border-strong);
   color: var(--text);
-  font-family: var(--font-mono);
+  font-family: var(--font-mono); font-stretch: 125%; font-weight: 600;
   font-size: 0.66rem;
   text-transform: uppercase;
   letter-spacing: 0.08em;
@@ -285,11 +332,11 @@ p {
 
 /* Oversized wordmark, printed like a film edge */
 .site-footer::before {
-  content: 'FRAME/WORK';
+  content: 'XOTIC';
   display: block;
   font-family: var(--font-display);
   font-weight: 900;
-  font-size: clamp(3.5rem, 17vw, 15.5rem);
+  font-size: clamp(5rem, 30vw, 27rem);
   line-height: 0.82;
   letter-spacing: -0.01em;
   color: transparent;
@@ -321,7 +368,7 @@ p {
 }
 
 .footer-links a {
-  font-family: var(--font-mono);
+  font-family: var(--font-mono); font-stretch: 125%; font-weight: 600;
   font-size: 0.64rem;
   text-transform: uppercase;
   letter-spacing: 0.08em;
@@ -338,7 +385,7 @@ p {
   display: inline-flex;
   align-items: center;
   gap: 0.6rem;
-  font-family: var(--font-mono);
+  font-family: var(--font-mono); font-stretch: 125%;
   font-size: 0.68rem;
   font-weight: 500;
   letter-spacing: 0.08em;
@@ -438,7 +485,7 @@ section { padding: 7rem 0; }
 /* Tags / chips */
 .tags { display: flex; flex-wrap: wrap; gap: 0.4rem; list-style: none; margin: 0; padding: 0; }
 .tags li {
-  font-family: var(--font-mono);
+  font-family: var(--font-mono); font-stretch: 125%; font-weight: 600;
   font-size: 0.58rem;
   letter-spacing: 0.06em;
   text-transform: uppercase;
@@ -449,7 +496,7 @@ section { padding: 7rem 0; }
 
 /* Inline text link */
 .text-link {
-  font-family: var(--font-mono);
+  font-family: var(--font-mono); font-stretch: 125%; font-weight: 600;
   font-size: 0.66rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -468,7 +515,7 @@ section { padding: 7rem 0; }
   background: var(--accent);
   color: #fff;
   padding: 0.6rem 1rem;
-  font-family: var(--font-mono);
+  font-family: var(--font-mono); font-stretch: 125%; font-weight: 600;
   font-size: 0.7rem;
   text-transform: uppercase;
 }

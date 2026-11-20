@@ -16,7 +16,7 @@ if (navToggle && navLinks) {
 }
 
 // Scroll reveal
-const revealEls = document.querySelectorAll('.reveal');
+const revealEls = document.querySelectorAll('.reveal, .mark-wait');
 if ('IntersectionObserver' in window && !reduceMotion) {
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
@@ -72,7 +72,7 @@ if (contactForm) {
 
     const key = contactForm.querySelector('input[name="access_key"]').value;
     if (!key || key === 'YOUR_WEB3FORMS_ACCESS_KEY_HERE') {
-      show('The form isn’t set up yet. Please email info@xotic.dev directly.', 'error');
+      show('The form isn’t set up yet. Please email mehmet.xeyd@gmail.com directly.', 'error');
       return;
     }
 
@@ -93,7 +93,7 @@ if (contactForm) {
       contactForm.reset();
       show('Thanks, your message was sent. I’ll reply soon.', 'success');
     } catch (err) {
-      show('Something went wrong. Please email info@xotic.dev instead.', 'error');
+      show('Something went wrong. Please email mehmet.xeyd@gmail.com instead.', 'error');
     } finally {
       button.disabled = false;
       button.textContent = 'Send message';

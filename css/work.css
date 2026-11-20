@@ -34,7 +34,7 @@
 .case-steps p { margin: 0.5rem 0 0; max-width: 44ch; }
 
 code {
-  font-family: var(--font-mono);
+  font-family: var(--font-code);
   font-size: 0.86em;
   color: var(--text);
   background: rgba(128, 118, 104, 0.16);

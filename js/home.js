@@ -1,15 +1,6 @@
 (function () {
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  // ---- Grease-pencil "select" mark on each gallery frame ----
-  const ring = '<svg class="pencil-ring" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">' +
-    '<path pathLength="1" d="M10 58 C 4 24, 38 4, 64 8 C 92 12, 99 40, 94 64 C 88 90, 56 98, 32 92 C 10 86, 2 64, 12 40 C 16 30, 24 22, 34 18"/></svg>';
-  document.querySelectorAll('#gallery .shot').forEach((s, i) => {
-    s.insertAdjacentHTML('beforeend', ring);
-    // vary each mark a little so they look hand-drawn
-    s.querySelector('.pencil-ring').style.transform = `rotate(${(i % 2 ? 1 : -1) * (1 + (i % 3))}deg)`;
-  });
-
   // ---- Gallery filters ----
   const shots = [...document.querySelectorAll('#gallery .shot')];
   const chips = document.querySelectorAll('.chip[data-filter]');
