@@ -12,7 +12,7 @@
 
 .portrait-frame {
   aspect-ratio: 4 / 5;
-  background: linear-gradient(150deg, #1c1d22, #0d0e10);
+  background: var(--film);
   border: 1px solid var(--border);
   margin-bottom: 0.8rem;
   position: relative;
@@ -22,7 +22,7 @@
   content: '';
   position: absolute;
   inset: 0;
-  background: repeating-linear-gradient(45deg, rgba(237,234,227,0.03) 0 2px, transparent 2px 12px);
+  background: repeating-linear-gradient(45deg, rgba(237,230,214,0.04) 0 2px, transparent 2px 12px);
 }
 
 .bio-text p { max-width: 52ch; font-size: 1.02rem; }
