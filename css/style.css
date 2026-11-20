@@ -280,3 +280,60 @@ section { padding: 7rem 0; }
 @media (max-width: 720px) {
   section { padding: 4.5rem 0; }
 }
+
+/* ============================================
+   SHARED PAGE PATTERNS
+   ============================================ */
+.page-header { padding: 9rem 0 3rem; }
+
+.page-title {
+  font-size: clamp(2.2rem, 5.5vw, 3.6rem);
+  margin-top: 1rem;
+  max-width: 16ch;
+}
+
+.page-lede { font-size: 1.05rem; max-width: 52ch; margin-top: 1.6rem; }
+
+.section-head { margin-bottom: 3.5rem; }
+.section-head h2 { font-size: clamp(2rem, 4vw, 2.8rem); margin-top: 0.6rem; }
+
+.cta-band {
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-elevated);
+}
+
+.cta-inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 2rem;
+}
+
+.cta-inner h2 { font-size: clamp(1.8rem, 4vw, 2.6rem); }
+
+/* Tags / chips */
+.tags { display: flex; flex-wrap: wrap; gap: 0.45rem; list-style: none; margin: 0; padding: 0; }
+.tags li {
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--text);
+  border: 1px solid var(--border-strong);
+  padding: 0.3rem 0.6rem;
+  border-radius: 2px;
+}
+
+/* Inline text link with arrow */
+.text-link {
+  font-family: var(--font-mono);
+  font-size: 0.74rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  border-bottom: 1px solid var(--border-strong);
+  padding-bottom: 2px;
+  transition: color 0.2s, border-color 0.2s;
+}
+.text-link:hover { color: var(--accent); border-color: var(--accent); }

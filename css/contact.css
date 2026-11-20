@@ -78,3 +78,9 @@
 @media (max-width: 880px) {
   .contact-grid { grid-template-columns: 1fr; gap: 2.5rem; }
 }
+
+.hp { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }
+.form-status.is-error { color: var(--accent); }
+.form-status.is-success { color: var(--text); }
+.contact-form .btn[disabled] { opacity: 0.6; cursor: progress; }
+.field input:invalid:not(:placeholder-shown):not(:focus) { border-color: var(--accent); }

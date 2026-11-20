@@ -43,12 +43,6 @@
 }
 
 /* ============================================
-   SECTION HEAD (shared pattern)
-   ============================================ */
-.section-head { margin-bottom: 3.5rem; }
-.section-head h2 { font-size: clamp(2rem, 4vw, 2.8rem); margin-top: 0.6rem; }
-
-/* ============================================
    PROOF SHEET GRID
    ============================================ */
 .sheet-grid {
@@ -96,11 +90,6 @@
 
 .ph-1 {
     background-image: url('../images/photo1.JPG');
-    background-size: cover;
-    background-position: center;
-}
-.ph-2 {
-    background-image: url('../images/photo2.JPG');
     background-size: cover;
     background-position: center;
 }
@@ -185,20 +174,33 @@
 }
 
 /* ============================================
-   CTA BAND
+   PROJECTS TEASER
    ============================================ */
-.cta-band {
-  border-top: 1px solid var(--border);
-  border-bottom: 1px solid var(--border);
-  background: var(--bg-elevated);
+.teaser-grid {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr 1fr;
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
 }
 
-.cta-inner {
+.teaser {
+  background: var(--bg);
+  padding: 2rem;
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 2rem;
+  flex-direction: column;
+  gap: 0.8rem;
+  transition: background 0.3s var(--ease);
 }
 
-.cta-inner h2 { font-size: clamp(1.8rem, 4vw, 2.6rem); }
+.teaser:hover { background: var(--bg-elevated); }
+.teaser:hover .text-link { color: var(--accent); border-color: var(--accent); }
+.teaser h3 { font-size: 1.45rem; }
+.teaser p { margin: 0 0 0.6rem; }
+.teaser .text-link { margin-top: auto; align-self: flex-start; }
+.teaser-main { background: radial-gradient(ellipse 80% 80% at 100% 0%, var(--accent-soft), transparent 70%), var(--bg); }
+.teaser-main .mono-caption { color: var(--accent); }
+
+@media (max-width: 880px) {
+  .teaser-grid { grid-template-columns: 1fr; }
+}

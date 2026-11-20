@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CV — Frame/Work</title>
+<meta name="description" content="CV: skills, experience, education and achievements.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400..700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/cv.css">
+</head>
+<body>
+
+<nav class="site-nav">
+  <a href="index.html" class="logo">FRAME<span>/</span>WORK</a>
+  <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false">Menu</button>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="work.html">Work</a></li>
+    <li><a href="cv.html">CV</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="contact.html">Contact</a></li>
+  </ul>
+</nav>
+
+<!--
+  HOW TO EDIT THIS PAGE
+  - Anything inside an element with class="fill-me" is a placeholder (shown
+    with a dashed orange outline). Replace the text, then delete the
+    class="fill-me" so the outline disappears.
+  - To add an entry, copy one <li class="entry">…</li> block and paste it.
+  - "Save as PDF" prints this page with a clean white print layout.
+-->
+
+<header class="page-header">
+  <div class="container cv-header">
+    <div>
+      <p class="eyebrow reveal">Curriculum Vitae</p>
+      <h1 class="page-title reveal"><span class="fill-me">Your Name</span></h1>
+      <p class="page-lede reveal">Developer working across blockchain, web infrastructure and security, with a photographer's eye for the details.</p>
+    </div>
+    <div class="cv-actions reveal">
+      <button type="button" class="btn btn-solid" id="print-cv">Save as PDF</button>
+      <a href="contact.html" class="btn">Contact</a>
+    </div>
+    <ul class="cv-contact mono-caption print-only">
+      <li>xotic.dev</li>
+      <li>info@xotic.dev</li>
+      <li>github.com/mehmetxeyd</li>
+    </ul>
+  </div>
+</header>
+
+<main class="container cv-body">
+
+  <!-- SKILLS -->
+  <section class="cv-section reveal">
+    <h2 class="cv-label eyebrow">Skills</h2>
+    <div class="skill-grid">
+      <div>
+        <h3>Blockchain</h3>
+        <ul class="tags"><li>Solana</li><li>Anchor</li><li>Rust</li><li>web3.js</li></ul>
+      </div>
+      <div>
+        <h3>Security &amp; PKI</h3>
+        <ul class="tags"><li>X.509</li><li>CRL / OCSP</li><li>Ed25519</li><li>TLS</li></ul>
+      </div>
+      <div>
+        <h3>Web</h3>
+        <ul class="tags"><li>HTML</li><li>CSS</li><li>JavaScript</li><li>Responsive design</li></ul>
+      </div>
+      <div>
+        <h3>Infrastructure</h3>
+        <ul class="tags"><li>Cloudflare</li><li>DNS</li><li>Git / GitHub</li><li>CI/CD</li></ul>
+      </div>
+      <div>
+        <h3>Software &amp; Games</h3>
+        <ul class="tags"><li>C#</li><li>.NET</li><li>Unity</li></ul>
+      </div>
+      <div>
+        <h3>Visual</h3>
+        <ul class="tags"><li>Photography</li><li>Composition</li><li>Web design</li></ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROJECTS -->
+  <section class="cv-section reveal">
+    <h2 class="cv-label eyebrow">Projects</h2>
+    <ol class="timeline">
+      <li class="entry">
+        <p class="entry-date mono-caption">2026</p>
+        <div>
+          <h3>Credential revocation on Solana</h3>
+          <p class="entry-where">Independent prototype · <a href="work.html#solana">Case study</a></p>
+          <p>Built an Anchor program and web app that put certificate revocation status on Solana, replacing CRL/OCSP servers with a public on-chain registry. Issuers sign credentials with Ed25519, and anyone can verify them without a wallet. Deployed to devnet.</p>
+        </div>
+      </li>
+      <li class="entry">
+        <p class="entry-date mono-caption">2026</p>
+        <div>
+          <h3>zen web solutions &amp; xotic.dev</h3>
+          <p class="entry-where">Web design &amp; development · <a href="https://zen.xotic.dev" target="_blank" rel="noopener">zen.xotic.dev</a></p>
+          <p>Designed and shipped static websites on Cloudflare, with custom domains, TLS, automatic deploys from GitHub and working contact forms.</p>
+        </div>
+      </li>
+      <li class="entry">
+        <p class="entry-date mono-caption fill-me">Year</p>
+        <div>
+          <h3>Hayu</h3>
+          <p class="entry-where">Unity 2D game</p>
+          <p>Built a 2D game in Unity (C#, URP) with parallax backgrounds and the Input System.</p>
+        </div>
+      </li>
+    </ol>
+  </section>
+
+  <!-- EXPERIENCE -->
+  <section class="cv-section reveal">
+    <h2 class="cv-label eyebrow">Experience</h2>
+    <ol class="timeline">
+      <li class="entry fill-me">
+        <p class="entry-date mono-caption">20XX — Now</p>
+        <div>
+          <h3>Job title</h3>
+          <p class="entry-where">Company · City</p>
+          <p>One or two lines on what you did and the result, for example "Built X, which cut Y by Z%."</p>
+        </div>
+      </li>
+      <li class="entry">
+        <p class="entry-date mono-caption fill-me">20XX — Now</p>
+        <div>
+          <h3>Freelance photographer &amp; web designer</h3>
+          <p class="entry-where">Self-employed</p>
+          <p>Portrait, event and personal photography, plus custom websites for clients.</p>
+        </div>
+      </li>
+    </ol>
+  </section>
+
+  <!-- EDUCATION -->
+  <section class="cv-section reveal">
+    <h2 class="cv-label eyebrow">Education</h2>
+    <ol class="timeline">
+      <li class="entry fill-me">
+        <p class="entry-date mono-caption">20XX — 20XX</p>
+        <div>
+          <h3>Degree / Programme</h3>
+          <p class="entry-where">School or University · City</p>
+          <p>Relevant coursework, thesis or grade (optional).</p>
+        </div>
+      </li>
+    </ol>
+  </section>
+
+  <!-- ACHIEVEMENTS -->
+  <section class="cv-section reveal">
+    <h2 class="cv-label eyebrow">Achievements</h2>
+    <ul class="achievements">
+      <li class="fill-me">
+        <span class="mono-caption">20XX</span>
+        <p>Hackathon placement, award, certification or competition result.</p>
+      </li>
+      <li class="fill-me">
+        <span class="mono-caption">20XX</span>
+        <p>Certification, such as a security or cloud cert.</p>
+      </li>
+    </ul>
+  </section>
+
+  <!-- LANGUAGES -->
+  <section class="cv-section reveal">
+    <h2 class="cv-label eyebrow">Languages</h2>
+    <ul class="lang-list fill-me">
+      <li><strong>English</strong> <span class="mono-caption">Fluent</span></li>
+      <li><strong>Language</strong> <span class="mono-caption">Level</span></li>
+    </ul>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="footer-grid">
+    <p class="mono-caption">© 2026 Frame/Work — All rights reserved</p>
+    <ul class="footer-links">
+      <li><a href="mailto:info@xotic.dev">Email</a></li>
+      <li><a href="#">Instagram</a></li>
+      <li><a href="https://github.com/mehmetxeyd" target="_blank" rel="noopener">GitHub</a></li>
+    </ul>
+  </div>
+</footer>
+
+<script src="js/main.js"></script>
+</body>
+</html>

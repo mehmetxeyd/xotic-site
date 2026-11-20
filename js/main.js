@@ -45,14 +45,55 @@ document.querySelectorAll('.nav-links a').forEach(link => {
   }
 });
 
-// Simple contact form handler (front-end only, no backend yet)
+// Contact form — sends via Web3Forms (see contact.html for setup)
 const contactForm = document.querySelector('#contact-form');
 if (contactForm) {
-  contactForm.addEventListener('submit', (e) => {
+  const status = contactForm.querySelector('#form-status');
+  const button = contactForm.querySelector('button[type="submit"]');
+  const show = (msg, type) => {
+    status.textContent = msg;
+    status.className = 'form-status mono-caption is-visible is-' + type;
+  };
+
+  contactForm.addEventListener('submit', async (e) => {
     e.preventDefault();
-    const status = document.querySelector('#form-status');
-    status.textContent = 'Message ready — connect a form backend (e.g. Formspree) to send this for real.';
-    status.classList.add('is-visible');
-    contactForm.reset();
+
+    if (!contactForm.checkValidity()) {
+      contactForm.reportValidity();
+      return;
+    }
+
+    const key = contactForm.querySelector('input[name="access_key"]').value;
+    if (!key || key === 'YOUR_WEB3FORMS_ACCESS_KEY_HERE') {
+      show('The form isn’t set up yet. Please email info@xotic.dev directly.', 'error');
+      return;
+    }
+
+    const data = Object.fromEntries(new FormData(contactForm));
+    data.replyto = data.email;
+
+    button.disabled = true;
+    button.textContent = 'Sending…';
+
+    try {
+      const res = await fetch(contactForm.action, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify(data)
+      });
+      const json = await res.json();
+      if (!res.ok || !json.success) throw new Error(json.message || 'Send failed');
+      contactForm.reset();
+      show('Thanks, your message was sent. I’ll reply soon.', 'success');
+    } catch (err) {
+      show('Something went wrong. Please email info@xotic.dev instead.', 'error');
+    } finally {
+      button.disabled = false;
+      button.textContent = 'Send message';
+    }
   });
 }
+
+// "Save as PDF" on the CV page
+const printBtn = document.querySelector('#print-cv');
+if (printBtn) printBtn.addEventListener('click', () => window.print());
