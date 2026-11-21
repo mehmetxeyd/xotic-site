@@ -82,6 +82,28 @@
     });
   }
 
+  // Master volume: Unity plays through Web Audio, so every connection to the
+  // speakers is routed through one gain node we control from the parent page.
+  var volume = 0.5, gains = [];
+  if (window.AudioNode && window.AudioDestinationNode) {
+    var connect = AudioNode.prototype.connect;
+    AudioNode.prototype.connect = function (dest) {
+      if (dest instanceof AudioDestinationNode) {
+        var ctx = dest.context, g = null;
+        for (var i = 0; i < gains.length; i++) if (gains[i].context === ctx) g = gains[i];
+        if (!g) { g = ctx.createGain(); g.gain.value = volume; connect.call(g, dest); gains.push(g); }
+        var args = Array.prototype.slice.call(arguments); args[0] = g;
+        return connect.apply(this, args);
+      }
+      return connect.apply(this, arguments);
+    };
+  }
+  function setVolume(v) {
+    volume = Math.max(0, Math.min(1, +v || 0));
+    gains.forEach(function (g) { g.gain.setTargetAtTime(volume, g.context.currentTime, 0.03); });
+  }
+  window.hayuAudio = { gains: gains, get volume() { return volume; } };
+
   tell('loading');
 
   Promise.all([
@@ -110,7 +132,7 @@
       window.hayu = instance;
       setTimeout(function () { URL.revokeObjectURL(dataUrl); URL.revokeObjectURL(codeUrl); }, 5000);
       loading.hidden = true;
-      canvas.focus();
+      canvas.focus({ preventScroll: true });
       tell('ready');
     });
   }).catch(function (err) {
@@ -120,8 +142,9 @@
   // Parent page asks for focus (e.g. after pressing Play or leaving fullscreen)
   window.addEventListener('message', function (e) {
     if (e.origin !== window.location.origin || !e.data) return;
-    if (e.data.hayu === 'focus') canvas.focus();
+    if (e.data.hayu === 'focus') canvas.focus({ preventScroll: true });
+    if (e.data.hayu === 'volume') setVolume(e.data.value);
   });
   // Clicking anywhere in the frame gives the canvas the keyboard
-  document.addEventListener('pointerdown', function () { canvas.focus(); });
+  document.addEventListener('pointerdown', function () { canvas.focus({ preventScroll: true }); });
 })();
