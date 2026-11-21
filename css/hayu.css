@@ -1,0 +1,296 @@
+/* ============================================
+   HAYU — play page
+   ============================================ */
+/* compact header so the Play button is visible without scrolling */
+.hayu-header { padding: 8.5rem 0 2.6rem; }
+.hayu-head-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1.25fr) minmax(0, 0.75fr);
+  gap: 1rem 3rem;
+  align-items: end;
+}
+.hayu-header .page-title { font-size: clamp(3rem, 7.4vw, 7rem); max-width: none; }
+.hayu-header .page-title em { display: block; font-size: 0.55em; margin-top: 0.08em; }
+.hayu-header .page-lede { margin: 0 0 0.5rem; font-size: 1.1rem; }
+
+.arcade { padding-top: 0; }
+
+/* ---- The cabinet: a strip of film with a screen in it ---- */
+.cabinet {
+  --hole: #E9E3D5;
+  position: relative;
+  padding: 40px 18px;
+  box-shadow: 0 40px 80px -40px rgba(40, 25, 10, 0.6);
+}
+
+/* sprocket rails */
+.cabinet::before,
+.cabinet::after {
+  content: '';
+  position: absolute;
+  left: 10px;
+  right: 10px;
+  height: 12px;
+  background: radial-gradient(7px 4.5px at 50% 50%, var(--hole) 94%, transparent 100%) 0 0 / 28px 12px repeat-x;
+  pointer-events: none;
+}
+.cabinet::before { top: 10px; }
+.cabinet::after { bottom: 10px; }
+
+.cabinet-edge {
+  position: absolute;
+  left: 22px;
+  right: 22px;
+  bottom: 23px;
+  display: flex;
+  justify-content: space-between;
+  color: var(--edge);
+  font-size: 0.5rem;
+  pointer-events: none;
+}
+
+/* ---- The screen (16:9). The game frame inside is 1600×900 and is
+       scaled to fit by hayu.js, so the game always sees its native size. ---- */
+.screen {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  background: #000;
+  overflow: hidden;
+}
+
+.screen-poster {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: brightness(0.5) saturate(0.85);
+  transition: filter 0.5s var(--ease), transform 1.2s var(--ease);
+}
+.screen:hover .screen-poster { filter: brightness(0.62) saturate(1); transform: scale(1.015); }
+
+.screen-ui {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.1rem;
+  padding: 1rem;
+  text-align: center;
+}
+
+.btn-play { font-size: 0.78rem; padding: 1.25rem 2.1rem; gap: 0.8rem; }
+.btn-play > span:first-child { font-size: 1.05em; }
+
+.screen-note { margin: 0; color: var(--edge); max-width: none; }
+.touch-note {
+  margin: 1rem 0 0;
+  max-width: none;
+  padding: 0.8rem 1rem;
+  border: 1.5px dashed var(--accent);
+  color: var(--text);
+  font-size: 1rem;
+}
+.touch-note span { color: var(--accent); margin-right: 0.3rem; }
+.touch-note[hidden] { display: none; }
+
+.screen.is-playing .screen-poster,
+.screen.is-playing .screen-ui { display: none; }
+
+.screen-frame {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 1600px;
+  height: 900px;
+  transform-origin: 0 0;
+}
+.screen-frame iframe { display: block; width: 1600px; height: 900px; border: 0; background: #12100D; }
+
+/* fullscreen: the screen fills the display, the game is letterboxed */
+.screen:fullscreen { aspect-ratio: auto; width: 100vw; height: 100vh; }
+.screen:-webkit-full-screen { aspect-ratio: auto; width: 100vw; height: 100vh; }
+
+/* ---- Controls under the cabinet ---- */
+.cabinet-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem 2rem;
+  margin-top: 1.3rem;
+}
+
+.keys {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.6rem 1.6rem;
+  margin: 0;
+  max-width: none;
+  color: var(--text);
+}
+.keys > span { display: inline-flex; align-items: center; gap: 0.3rem; }
+
+kbd {
+  display: inline-grid;
+  place-items: center;
+  min-width: 2rem;
+  height: 2rem;
+  padding: 0 0.45rem;
+  font-family: var(--font-mono);
+  font-stretch: 125%;
+  font-weight: 600;
+  font-size: 0.66rem;
+  color: var(--text);
+  background: #F3EEE3;
+  border: 1.5px solid var(--text);
+  border-bottom-width: 3.5px;
+}
+
+.cabinet-actions { display: flex; align-items: center; flex-wrap: wrap; gap: 0.7rem 1.2rem; }
+.cabinet-actions .btn { padding: 0.8rem 1.2rem; }
+.btn[disabled] { opacity: 0.4; cursor: not-allowed; }
+.btn[disabled]:hover { transform: none; box-shadow: none; }
+
+/* ============================================
+   HOW TO PLAY
+   ============================================ */
+.how-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+  gap: 2rem 4rem;
+  align-items: start;
+}
+.how-grid .section-head { margin-bottom: 0; }
+
+.how-steps { list-style: none; margin: 0; padding: 0; }
+.how-steps li {
+  display: grid;
+  grid-template-columns: 6.5rem 1fr;
+  gap: 1.2rem;
+  align-items: start;
+  border-top: 1.5px solid var(--text);
+  padding: 1.4rem 0 1.7rem;
+}
+.how-steps li:last-child { border-bottom: 1.5px solid var(--text); }
+.how-num {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: 4.6rem;
+  line-height: 0.8;
+  color: transparent;
+  -webkit-text-stroke: 1.5px var(--text);
+  transition: color 0.3s, -webkit-text-stroke-color 0.3s;
+}
+.how-steps li:hover .how-num { color: var(--accent); -webkit-text-stroke-color: var(--accent); }
+.how-steps h3 { font-size: 2rem; margin-bottom: 0.3rem; text-transform: uppercase; }
+.how-steps p { margin: 0; max-width: 40ch; }
+
+/* ============================================
+   FRAMES (darkroom strip)
+   ============================================ */
+.hayu-frames { position: relative; overflow-x: clip; }
+.hayu-frames::before,
+.hayu-frames::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 12px;
+  background: radial-gradient(7px 4.5px at 50% 50%, #E9E3D5 94%, transparent 100%) 0 0 / 28px 12px repeat-x;
+  opacity: 0.9;
+}
+.hayu-frames::before { top: 14px; }
+.hayu-frames::after { bottom: 14px; }
+
+.hayu-strip {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1.2rem;
+}
+.hayu-strip figure { margin: 0; }
+.hayu-strip img {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  border: 1px solid var(--border);
+}
+.hayu-strip figcaption { margin-top: 0.6rem; }
+.hayu-strip figcaption b { color: var(--edge); font-weight: 600; margin-right: 0.45rem; }
+
+/* ============================================
+   ABOUT THE GAME
+   ============================================ */
+.hayu-about-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+  gap: 3rem 5rem;
+  align-items: start;
+}
+.hayu-about .eyebrow { margin-bottom: 1.4rem; }
+.hayu-lede {
+  font-size: clamp(1.6rem, 3vw, 2.4rem);
+  line-height: 1.18;
+  letter-spacing: -0.015em;
+  color: var(--text);
+  max-width: 26ch;
+  margin-bottom: 1.6rem;
+}
+.hayu-about p:not(.hayu-lede):not(.eyebrow) { font-size: 1.12rem; max-width: 50ch; }
+.hayu-links { display: flex; align-items: center; flex-wrap: wrap; gap: 1rem 1.6rem; margin-top: 2rem; }
+
+.facts { margin: 0; border-top: 1.5px solid var(--text); }
+.facts div {
+  display: grid;
+  grid-template-columns: 8.5rem 1fr;
+  gap: 1rem;
+  padding: 0.95rem 0;
+  border-bottom: 1px solid var(--border-strong);
+}
+.facts dt { color: var(--accent); padding-top: 0.2rem; }
+.facts dd { margin: 0; color: var(--text); }
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+@media (max-width: 980px) {
+  .hayu-strip {
+    grid-template-columns: none;
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(250px, 46%);
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    padding-bottom: 0.6rem;
+  }
+  .hayu-strip figure { scroll-snap-align: start; }
+}
+
+@media (max-width: 880px) {
+  .how-grid, .hayu-about-grid, .hayu-head-row { grid-template-columns: 1fr; }
+  .hayu-header .page-lede { margin-top: 0.6rem; }
+}
+
+@media (max-width: 560px) {
+  .cabinet { padding: 30px 8px; }
+  .cabinet::before { top: 7px; }
+  .cabinet::after { bottom: 7px; }
+  .cabinet-edge { display: none; }
+  .btn-play { padding: 1rem 1.4rem; }
+  .screen-note { display: none; }
+  .hayu-header { padding-top: 7.5rem; }
+  .how-steps li { grid-template-columns: 4.2rem 1fr; }
+  .how-num { font-size: 3.2rem; }
+  .hayu-strip { grid-auto-columns: 82%; }
+  .facts div { grid-template-columns: 7rem 1fr; }
+}
+
+/* short laptop screens: tighten the header so Play stays above the fold */
+@media (max-height: 820px) and (min-width: 881px) {
+  .hayu-header { padding: 7rem 0 1.8rem; }
+  .hayu-header .page-title { font-size: clamp(3rem, 6vw, 5.4rem); }
+  .arcade .cabinet { padding-top: 34px; padding-bottom: 34px; }
+}

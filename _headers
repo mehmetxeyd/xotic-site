@@ -21,3 +21,13 @@
   Cache-Control: public, max-age=0, must-revalidate
 /js/*
   Cache-Control: public, max-age=0, must-revalidate
+
+# Hayu (self-hosted Unity WebGL game). Needs WebAssembly ('wasm-unsafe-eval'),
+# local blob: URLs for the unpacked build, and may only be framed by this site.
+/games/hayu/*
+  ! Content-Security-Policy
+  ! X-Frame-Options
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'wasm-unsafe-eval'; connect-src 'self' blob:; img-src 'self' data: blob:; style-src 'self' 'unsafe-inline'; font-src 'self'; media-src 'self' blob:; worker-src 'self' blob:; frame-ancestors 'self'; base-uri 'self'; object-src 'none'; form-action 'none'
+  X-Frame-Options: SAMEORIGIN
+  X-Robots-Tag: noindex
+  Cache-Control: public, max-age=0, must-revalidate

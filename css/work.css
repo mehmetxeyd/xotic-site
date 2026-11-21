@@ -81,7 +81,7 @@ code {
    ============================================ */
 .project-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   gap: 1px;
   background: var(--border);
   border: 1px solid var(--border);
@@ -102,8 +102,10 @@ code {
 .project .tags { margin: 0.4rem 0 1.6rem; }
 .project-links { display: flex; gap: 1.4rem; margin-top: auto; }
 
-@media (max-width: 720px) {
+@media (max-width: 980px) {
   .project-grid { grid-template-columns: 1fr; }
+}
+@media (max-width: 720px) {
   .project { padding: 1.6rem; }
 }
 
@@ -139,3 +141,53 @@ code {
 .repos-actions .btn[disabled] { opacity: 0.6; cursor: default; }
 .repos-note { margin-top: 1rem; max-width: none; }
 .repos-note .text-link { font-size: inherit; }
+
+/* ============================================
+   CASE 02 — HAYU (game)
+   ============================================ */
+.case + .case { margin-top: 1.6rem; }
+.case-game {
+  background:
+    radial-gradient(ellipse 60% 80% at 0% 100%, rgba(232, 163, 61, 0.12), transparent 70%),
+    var(--bg-elevated);
+  align-items: center;
+}
+.case-shot {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  border: 1px solid var(--border-strong);
+  aspect-ratio: 16 / 9;
+}
+.case-shot img { width: 100%; height: 100%; object-fit: cover; transition: transform 1.2s var(--ease), filter 0.5s; }
+.case-shot:hover img { transform: scale(1.04); filter: brightness(0.75); }
+.case-shot-play {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%) scale(0.9);
+  opacity: 0;
+  font-family: var(--font-mono);
+  font-stretch: 125%;
+  font-weight: 600;
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #fff;
+  background: var(--accent);
+  padding: 0.9rem 1.3rem;
+  transition: opacity 0.3s, transform 0.4s var(--ease);
+}
+.case-shot:hover .case-shot-play,
+.case-shot:focus-visible .case-shot-play { opacity: 1; transform: translate(-50%, -50%); }
+.case-shot-cap {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  padding: 0.45rem 0.7rem;
+  background: rgba(18, 16, 13, 0.8);
+  color: var(--edge);
+}
+@media (hover: none) {
+  .case-shot-play { opacity: 1; transform: translate(-50%, -50%); }
+}

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex">
+<title>Hayu — game</title>
+<link rel="stylesheet" href="/css/fonts.css">
+<link rel="stylesheet" href="game.css">
+</head>
+<body>
+<!--
+  Hayu, self-hosted Unity WebGL build. This page is shown inside the player on /hayu.
+  Updating the game: export a new WebGL build from Unity, then replace the files in Build/:
+    Hayu.loader.js, Hayu.framework.js  -> copy as they are
+    Hayu.data, Hayu.wasm                -> gzip them (gzip -9 -n), upload as Hayu.data.gz / Hayu.wasm.gz
+  The .gz trick keeps each file under Cloudflare's 25 MB limit; game.js unpacks them in the browser.
+-->
+<canvas id="unity-canvas" width="1600" height="900" tabindex="-1" aria-label="Hayu, game screen"></canvas>
+
+<div id="loading" class="overlay" role="status" aria-live="polite">
+  <p class="label">Developing <span>Hayu</span></p>
+  <div class="bar"><span></span></div>
+  <p class="pct">0%</p>
+</div>
+
+<div id="error" class="overlay" hidden>
+  <p class="label">The game didn't load</p>
+  <p class="msg"></p>
+  <a class="link" href="https://mehmetxeyd.itch.io/hayu" target="_blank" rel="noopener">Play it on itch.io instead ↗</a>
+</div>
+
+<script src="game.js"></script>
+</body>
+</html>

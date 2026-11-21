@@ -1,0 +1,70 @@
+/* Hayu player page (inside the iframe on /hayu). The canvas stays at the
+   game's native 1600×900; the parent page scales the whole frame to fit. */
+html, body {
+  margin: 0;
+  width: 1600px;
+  height: 900px;
+  overflow: hidden;
+  background: #12100D;
+  color: #EDE6D6;
+}
+
+#unity-canvas {
+  display: block;
+  width: 1600px;
+  height: 900px;
+  background: #12100D;
+  outline: none;
+}
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 22px;
+  background: #12100D;
+  font-family: 'Archivo', Arial, sans-serif;
+  font-stretch: 125%;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+}
+.overlay[hidden] { display: none; }
+
+.label { margin: 0; font-size: 22px; color: #A39886; }
+.label span { color: #EDE6D6; }
+
+.bar {
+  width: 520px;
+  height: 6px;
+  background: rgba(237, 230, 214, 0.14);
+  overflow: hidden;
+}
+.bar span {
+  display: block;
+  height: 100%;
+  background: #FF4B2B;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.25s ease-out;
+}
+
+.pct { margin: 0; font-size: 18px; color: #E8A33D; font-variant-numeric: tabular-nums; }
+
+#error .msg {
+  max-width: 900px;
+  margin: 0;
+  font-family: Georgia, serif;
+  font-stretch: normal;
+  font-weight: 400;
+  text-transform: none;
+  letter-spacing: 0;
+  font-size: 22px;
+  line-height: 1.5;
+  text-align: center;
+  color: #A39886;
+}
+#error .link { color: #EDE6D6; font-size: 18px; border-bottom: 3px solid #FF4B2B; text-decoration: none; padding-bottom: 4px; }
