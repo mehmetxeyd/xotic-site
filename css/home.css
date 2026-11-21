@@ -613,3 +613,7 @@
 }
 .teaser-game:hover::after { opacity: 0.32; filter: none; }
 .teaser-more { margin: 1.6rem 0 0; text-align: right; max-width: none; }
+
+/* links inside the intro text */
+.intro-text a { color: var(--text); border-bottom: 1.5px solid var(--accent); transition: color 0.2s; }
+.intro-text a:hover { color: var(--accent); }
