@@ -170,6 +170,9 @@
     if (e.data.hayu === 'focus') canvas.focus({ preventScroll: true });
     if (e.data.hayu === 'volume') setVolume(e.data.value);
   });
+  // Touch: block pinch and double-tap zoom inside the game screen
+  ['gesturestart', 'gesturechange', 'dblclick'].forEach(function (t) { document.addEventListener(t, function (e) { e.preventDefault(); }); });
+  document.addEventListener('touchmove', function (e) { e.preventDefault(); }, { passive: false });
   // Clicking anywhere in the frame gives the canvas the keyboard
   document.addEventListener('pointerdown', function () { canvas.focus({ preventScroll: true }); });
 })();

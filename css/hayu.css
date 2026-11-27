@@ -326,6 +326,11 @@ kbd {
 .bezel { position: relative; }
 
 @media (hover: none) and (pointer: coarse) {
+  /* no double-tap zoom anywhere on this page (pinch-zoom still works); iOS honours 'manipulation' */
+  html, body, .arcade, .arcade * { touch-action: manipulation; }
+  .arcade .hh-controls, .arcade .hh-controls * { touch-action: none; }
+  .hh-controls { margin: 0 -16px; padding-left: 30px; padding-right: 24px; }
+  .pill { padding: 12px 10px; }
   .cabinet-bar .keys { display: none; }
   .cabinet-bar { justify-content: center; }
 
