@@ -136,7 +136,32 @@
     var api = input(); if (api) api.releaseAll();
     cabinet.querySelectorAll('.is-down').forEach(function (b) { b.classList.remove('is-down'); });
   }
-  function buzz() { if (navigator.vibrate) try { navigator.vibrate(8); } catch (e) { /* ignore */ } }
+  // Haptics. Android: Vibration API. iPhone (iOS 18+): no vibration API for
+  // websites, but toggling a hidden switch control gives a light system tap.
+  var canVibrate = typeof navigator.vibrate === 'function';
+  var iosSwitch = null;
+  function iosTap() {
+    if (!iosSwitch) {
+      iosSwitch = document.createElement('label');
+      iosSwitch.setAttribute('aria-hidden', 'true');
+      iosSwitch.style.display = 'none';
+      var sw = document.createElement('input');
+      sw.type = 'checkbox';
+      sw.tabIndex = -1;
+      sw.setAttribute('switch', '');
+      iosSwitch.appendChild(sw);
+      document.body.appendChild(iosSwitch);
+    }
+    iosSwitch.click();
+  }
+  function buzz(ms, el) {
+    if (!touch) return;
+    if (canVibrate) { try { navigator.vibrate(ms); } catch (e) { /* ignore */ } return; }
+    var ua = navigator.userActivation;
+    if (!ua || ua.isActive) { iosTap(); return; }
+    // iOS only counts a touch as a gesture when the finger lifts: tap then
+    if (el) el.addEventListener('pointerup', iosTap, { once: true });
+  }
   function ensureGame() { if (!frame) load(); if (touch) openHandheld(); }
 
   // Open / close: full-screen handheld; the phone's Back button closes it
@@ -159,11 +184,11 @@
 
   // D-pad: one touch area, direction follows the thumb (slide between arms)
   var held = null, dpadPointer = null;
-  function setDir(dir) {
+  function setDir(dir, fromPress) {
     if (dir === held) return;
     if (held) sendKey(held, false);
     held = dir;
-    if (dir) { sendKey(dir, true); buzz(); }
+    if (dir) { sendKey(dir, true); buzz(12, fromPress ? dpad : null); }
     dpad.setAttribute('data-dir', dir || '');
   }
   function dirFrom(e) {
@@ -177,7 +202,7 @@
     ensureGame();
     dpadPointer = e.pointerId;
     try { dpad.setPointerCapture(e.pointerId); } catch (err) { /* ignore */ }
-    setDir(dirFrom(e));
+    setDir(dirFrom(e), true);
   });
   dpad.addEventListener('pointermove', function (e) { if (e.pointerId === dpadPointer) setDir(dirFrom(e)); });
   ['pointerup', 'pointercancel', 'lostpointercapture'].forEach(function (t) {
@@ -191,7 +216,7 @@
       e.preventDefault();
       if (!frame) { ensureGame(); return; }
       ensureGame();
-      btn.classList.add('is-down'); buzz();
+      btn.classList.add('is-down'); buzz(18, btn);
       try { btn.setPointerCapture(e.pointerId); } catch (err) { /* ignore */ }
       sendKey(name, true);
     });
@@ -208,7 +233,7 @@
   function syncSoundPill() { soundPill.setAttribute('aria-pressed', String(!muted)); soundPill.classList.toggle('is-off', muted); }
   cabinet.querySelectorAll('[data-hh]').forEach(function (el) {
     el.addEventListener('click', function (e) {
-      e.preventDefault(); buzz();
+      e.preventDefault(); buzz(10);
       var what = el.getAttribute('data-hh');
       if (what === 'close') closeHandheld(false);
       if (what === 'restart') { if (frame) restart(); else ensureGame(); }
