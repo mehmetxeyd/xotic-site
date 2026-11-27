@@ -104,6 +104,31 @@
   }
   window.hayuAudio = { gains: gains, get volume() { return volume; } };
 
+  // Touch controls on /hayu press keys for the player: the page calls
+  // hayuInput.key('up', true) etc. directly (same origin).
+  var KEYS = {
+    up: ['w', 'KeyW', 87], down: ['s', 'KeyS', 83],
+    left: ['a', 'KeyA', 65], right: ['d', 'KeyD', 68],
+    space: [' ', 'Space', 32], enter: ['Enter', 'Enter', 13]
+  };
+  var down = {};
+  function key(name, isDown) {
+    var k = KEYS[name];
+    if (!k || !!down[name] === isDown) return;
+    down[name] = isDown;
+    var e = new KeyboardEvent(isDown ? 'keydown' : 'keyup', { key: k[0], code: k[1], keyCode: k[2], which: k[2], bubbles: true, cancelable: true });
+    if (e.keyCode !== k[2]) {   // browsers that ignore keyCode in the init dict
+      Object.defineProperty(e, 'keyCode', { get: function () { return k[2]; } });
+      Object.defineProperty(e, 'which', { get: function () { return k[2]; } });
+    }
+    canvas.dispatchEvent(e);
+  }
+  window.hayuInput = {
+    key: key,
+    releaseAll: function () { Object.keys(down).forEach(function (n) { key(n, false); }); },
+    resumeAudio: function () { gains.forEach(function (g) { if (g.context.state === 'suspended') g.context.resume(); }); }
+  };
+
   tell('loading');
 
   Promise.all([

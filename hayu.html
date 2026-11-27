@@ -63,6 +63,10 @@
   <div class="container">
     <div class="cabinet darkroom reveal" id="game" data-src="games/hayu/">
       <div class="cabinet-edge mono-caption" aria-hidden="true"><span>HAYU ▸ 1600 × 900</span><span>XOTIC 400</span><span>LEVEL 1 ▸ 25 SWORDS</span></div>
+      <!-- Phones: the cabinet becomes a handheld (see css/hayu.css, "HANDHELD") -->
+      <button type="button" class="hh-power" data-hh="close" aria-label="Close the game">◂ OFF · ON ▸</button>
+      <div class="bezel">
+        <p class="bezel-label" aria-hidden="true"><span class="bezel-led"></span><i></i>HAYU ▸ XOTIC 400<i></i></p>
       <div class="screen" data-screen>
         <img class="screen-poster" src="images/hayu/title.png" width="1600" height="900" alt="Hayu title screen: pink pixel lettering reading Hayus Game over a dark red industrial city">
         <div class="screen-ui">
@@ -70,9 +74,26 @@
           <p class="mono-caption screen-note">19 MB · loads from this site · no tracking</p>
         </div>
       </div>
-    </div>
+      </div>
 
-    <p class="touch-note" hidden><span aria-hidden="true">⌨</span> Hayu is played with a keyboard. It loads on a phone, but you'll need a computer to play it.</p>
+      <div class="handheld" aria-label="Touch controls">
+        <p class="hh-brand" aria-hidden="true"><svg class="mark" viewBox="8 6 84 88" aria-hidden="true"><defs><mask id="xm-hh"><rect x="-10" y="-10" width="120" height="120" fill="#fff"/><polygon points="14,10 40,10 86,90 60,90" fill="#000" stroke="#000" stroke-width="9"/></mask></defs><g mask="url(#xm-hh)"><polygon class="mk-b mk-b1" points="60,10 70,10 24,90 14,90"/><polygon class="mk-b mk-b2" points="76,10 86,10 40,90 30,90"/></g><polygon class="mk-a" points="14,10 40,10 86,90 60,90"/><circle class="mk-dot" cx="50" cy="50" r="6.5"/></svg><span>OTIC</span><em>Hayu</em></p>
+        <div class="hh-controls">
+          <div class="dpad" data-dpad role="group" aria-label="Direction pad: up and down move the heart">
+            <span class="arm up"></span><span class="arm right"></span><span class="arm down"></span><span class="arm left"></span><span class="hub"></span>
+          </div>
+          <div class="ab">
+            <button type="button" class="ab-btn b" data-btn="enter" tabindex="-1" aria-label="B: start or retry"><span>B</span></button>
+            <button type="button" class="ab-btn a" data-btn="space" tabindex="-1" aria-label="A: start or retry"><span>A</span></button>
+          </div>
+        </div>
+        <div class="hh-pills">
+          <button type="button" class="pill" data-hh="sound" tabindex="-1" aria-pressed="false"><i></i>Sound</button>
+          <button type="button" class="pill" data-hh="restart" tabindex="-1"><i></i>Restart</button>
+        </div>
+        <div class="hh-grille" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+      </div>
+    </div>
 
     <div class="cabinet-bar reveal">
       <p class="keys">
