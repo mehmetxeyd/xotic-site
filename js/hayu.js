@@ -14,14 +14,11 @@
   var restartBtn = document.querySelector('[data-restart]');
   var frame = null, iframe = null;
 
-  // Phones/tablets: the game needs a keyboard
-  if (window.matchMedia && window.matchMedia('(hover: none) and (pointer: coarse)').matches) {
-    document.querySelector('.touch-note').hidden = false;
-    cabinet.querySelector('.btn-play-label').textContent = 'Load anyway';
-  }
+  // Phones/tablets get the handheld (touch controls, opens full-screen)
+  var touch = !!(window.matchMedia && window.matchMedia('(hover: none) and (pointer: coarse)').matches);
 
   var canFullscreen = !!(screen.requestFullscreen || screen.webkitRequestFullscreen);
-  if (!canFullscreen) fsBtn.hidden = true;
+  if (!canFullscreen || touch) fsBtn.hidden = true;
 
   function fit() {
     if (!frame) return;
@@ -58,7 +55,7 @@
     iframe.addEventListener('load', focusGame);
   }
 
-  playBtn.addEventListener('click', load);
+  playBtn.addEventListener('click', function () { load(); if (touch) openHandheld(); });
 
   // ---- Volume (remembered on this device) ----
   var vol = document.querySelector('[data-vol]');
@@ -111,9 +108,142 @@
   document.addEventListener('fullscreenchange', onFullscreenChange);
   document.addEventListener('webkitfullscreenchange', onFullscreenChange);
 
-  restartBtn.addEventListener('click', function () {
+  function restart() {
     if (!iframe) return;
+    releaseAll();
     screen.classList.remove('is-ready', 'has-error');
     try { iframe.contentWindow.location.reload(); } catch (e) { iframe.src = iframe.src; }
+  }
+  restartBtn.addEventListener('click', restart);
+
+  /* ============================================
+     HANDHELD (touch devices)
+     ============================================ */
+  var dpad = cabinet.querySelector('[data-dpad]');
+  var soundPill = cabinet.querySelector('[data-hh="sound"]');
+
+  function input() {
+    try { return iframe && iframe.contentWindow.hayuInput; } catch (e) { return null; }
+  }
+  function sendKey(name, isDown) {
+    var api = input();
+    if (!api) return;
+    if (isDown) api.resumeAudio();
+    api.key(name, isDown);
+  }
+  function releaseAll() {
+    setDir(null);
+    var api = input(); if (api) api.releaseAll();
+    cabinet.querySelectorAll('.is-down').forEach(function (b) { b.classList.remove('is-down'); });
+  }
+  // Haptics. Android: Vibration API. iPhone (iOS 18+): no vibration API for
+  // websites, but toggling a hidden switch control gives a light system tap.
+  var canVibrate = typeof navigator.vibrate === 'function';
+  var iosSwitch = null;
+  function iosTap() {
+    if (!iosSwitch) {
+      iosSwitch = document.createElement('label');
+      iosSwitch.setAttribute('aria-hidden', 'true');
+      iosSwitch.style.display = 'none';
+      var sw = document.createElement('input');
+      sw.type = 'checkbox';
+      sw.tabIndex = -1;
+      sw.setAttribute('switch', '');
+      iosSwitch.appendChild(sw);
+      document.body.appendChild(iosSwitch);
+    }
+    iosSwitch.click();
+  }
+  function buzz(ms, el) {
+    if (!touch) return;
+    if (canVibrate) { try { navigator.vibrate(ms); } catch (e) { /* ignore */ } return; }
+    var ua = navigator.userActivation;
+    if (!ua || ua.isActive) { iosTap(); return; }
+    // iOS only counts a touch as a gesture when the finger lifts: tap then
+    if (el) el.addEventListener('pointerup', iosTap, { once: true });
+  }
+  function ensureGame() { if (!frame) load(); if (touch) openHandheld(); }
+
+  // Open / close: full-screen handheld; the phone's Back button closes it
+  function openHandheld() {
+    if (cabinet.classList.contains('is-open')) return;
+    cabinet.classList.add('is-open');
+    document.documentElement.classList.add('hh-lock');
+    try { history.pushState({ hayu: 'open' }, ''); } catch (e) { /* ignore */ }
+    requestAnimationFrame(fit);
+  }
+  function closeHandheld(fromHistory) {
+    if (!cabinet.classList.contains('is-open')) return;
+    releaseAll();
+    cabinet.classList.remove('is-open');
+    document.documentElement.classList.remove('hh-lock');
+    if (!fromHistory && history.state && history.state.hayu === 'open') history.back();
+    requestAnimationFrame(fit);
+  }
+  window.addEventListener('popstate', function () { closeHandheld(true); });
+
+  // D-pad: one touch area, direction follows the thumb (slide between arms)
+  var held = null, dpadPointer = null;
+  function setDir(dir, fromPress) {
+    if (dir === held) return;
+    if (held) sendKey(held, false);
+    held = dir;
+    if (dir) { sendKey(dir, true); buzz(12, fromPress ? dpad : null); }
+    dpad.setAttribute('data-dir', dir || '');
+  }
+  function dirFrom(e) {
+    var r = dpad.getBoundingClientRect();
+    var x = e.clientX - (r.left + r.width / 2), y = e.clientY - (r.top + r.height / 2);
+    if (Math.sqrt(x * x + y * y) < r.width * 0.1) return held;   // small dead zone in the middle
+    return Math.abs(x) > Math.abs(y) ? (x > 0 ? 'right' : 'left') : (y > 0 ? 'down' : 'up');
+  }
+  dpad.addEventListener('pointerdown', function (e) {
+    e.preventDefault();
+    ensureGame();
+    dpadPointer = e.pointerId;
+    try { dpad.setPointerCapture(e.pointerId); } catch (err) { /* ignore */ }
+    setDir(dirFrom(e), true);
   });
+  dpad.addEventListener('pointermove', function (e) { if (e.pointerId === dpadPointer) setDir(dirFrom(e)); });
+  ['pointerup', 'pointercancel', 'lostpointercapture'].forEach(function (t) {
+    dpad.addEventListener(t, function (e) { if (e.pointerId === dpadPointer) { dpadPointer = null; setDir(null); } });
+  });
+
+  // A / B: press and hold like a key (A = Space, B = Enter: both start and retry)
+  cabinet.querySelectorAll('[data-btn]').forEach(function (btn) {
+    var name = btn.getAttribute('data-btn');
+    btn.addEventListener('pointerdown', function (e) {
+      e.preventDefault();
+      if (!frame) { ensureGame(); return; }
+      ensureGame();
+      btn.classList.add('is-down'); buzz(18, btn);
+      try { btn.setPointerCapture(e.pointerId); } catch (err) { /* ignore */ }
+      sendKey(name, true);
+    });
+    ['pointerup', 'pointercancel', 'lostpointercapture'].forEach(function (t) {
+      btn.addEventListener(t, function () {
+        if (!btn.classList.contains('is-down')) return;
+        btn.classList.remove('is-down');
+        sendKey(name, false);
+      });
+    });
+  });
+
+  // Pills: Sound (mute toggle) and Restart; power switch closes
+  function syncSoundPill() { soundPill.setAttribute('aria-pressed', String(!muted)); soundPill.classList.toggle('is-off', muted); }
+  cabinet.querySelectorAll('[data-hh]').forEach(function (el) {
+    el.addEventListener('click', function (e) {
+      e.preventDefault(); buzz(10);
+      var what = el.getAttribute('data-hh');
+      if (what === 'close') closeHandheld(false);
+      if (what === 'restart') { if (frame) restart(); else ensureGame(); }
+      if (what === 'sound') { muted = !muted; sendVolume(); syncSoundPill(); }
+    });
+  });
+  muteBtn.addEventListener('click', syncSoundPill);
+  syncSoundPill();
+
+  // Never leave a key stuck down
+  document.addEventListener('visibilitychange', function () { if (document.hidden) releaseAll(); });
+  cabinet.addEventListener('contextmenu', function (e) { if (touch) e.preventDefault(); });
 })();
