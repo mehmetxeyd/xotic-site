@@ -169,6 +169,7 @@
     if (cabinet.classList.contains('is-open')) return;
     cabinet.classList.add('is-open');
     document.documentElement.classList.add('hh-lock');
+    lockZoom(true);
     try { history.pushState({ hayu: 'open' }, ''); } catch (e) { /* ignore */ }
     requestAnimationFrame(fit);
   }
@@ -177,57 +178,84 @@
     releaseAll();
     cabinet.classList.remove('is-open');
     document.documentElement.classList.remove('hh-lock');
+    lockZoom(false);
     if (!fromHistory && history.state && history.state.hayu === 'open') history.back();
     requestAnimationFrame(fit);
   }
   window.addEventListener('popstate', function () { closeHandheld(true); });
 
-  // D-pad: one touch area, direction follows the thumb (slide between arms)
-  var held = null, dpadPointer = null;
+  // Controls: the whole control area is one touch zone, so near-misses still
+  // count. Left half = D-pad (direction from its centre, slide to change),
+  // right half = whichever of A / B is closer. Several fingers at once are fine.
+  var zone = cabinet.querySelector('.hh-controls');
+  var held = null, dpadPointer = null, pressed = {};   // pointerId -> A/B button
   function setDir(dir, fromPress) {
     if (dir === held) return;
     if (held) sendKey(held, false);
     held = dir;
-    if (dir) { sendKey(dir, true); buzz(12, fromPress ? dpad : null); }
+    if (dir) { sendKey(dir, true); buzz(12, fromPress ? zone : null); }
     dpad.setAttribute('data-dir', dir || '');
   }
+  function center(el) { var r = el.getBoundingClientRect(); return { x: r.left + r.width / 2, y: r.top + r.height / 2, w: r.width }; }
   function dirFrom(e) {
-    var r = dpad.getBoundingClientRect();
-    var x = e.clientX - (r.left + r.width / 2), y = e.clientY - (r.top + r.height / 2);
-    if (Math.sqrt(x * x + y * y) < r.width * 0.1) return held;   // small dead zone in the middle
+    var c = center(dpad), x = e.clientX - c.x, y = e.clientY - c.y;
+    if (Math.sqrt(x * x + y * y) < c.w * 0.1) return held;   // small dead zone in the middle
     return Math.abs(x) > Math.abs(y) ? (x > 0 ? 'right' : 'left') : (y > 0 ? 'down' : 'up');
   }
-  dpad.addEventListener('pointerdown', function (e) {
+  function onDpadSide(e) {
+    var d = dpad.getBoundingClientRect(), ab = cabinet.querySelector('.ab').getBoundingClientRect();
+    return e.clientX < (d.right + ab.left) / 2;
+  }
+  function nearestButton(e) {
+    var best = null, bestD = Infinity;
+    cabinet.querySelectorAll('[data-btn]').forEach(function (btn) {
+      var c = center(btn), d = Math.pow(e.clientX - c.x, 2) + Math.pow(e.clientY - c.y, 2);
+      if (d < bestD) { bestD = d; best = btn; }
+    });
+    return best;
+  }
+  zone.addEventListener('pointerdown', function (e) {
     e.preventDefault();
+    var wasLoaded = !!frame;
     ensureGame();
-    dpadPointer = e.pointerId;
-    try { dpad.setPointerCapture(e.pointerId); } catch (err) { /* ignore */ }
-    setDir(dirFrom(e), true);
+    // capture the finger so release always reaches us (landscape: the zone has no box of its own)
+    var cap = zone.getClientRects().length ? zone : e.target;
+    try { cap.setPointerCapture(e.pointerId); } catch (err) { /* ignore */ }
+    if (onDpadSide(e)) {
+      dpadPointer = e.pointerId;
+      setDir(dirFrom(e), true);
+    } else if (wasLoaded) {
+      var btn = nearestButton(e);
+      pressed[e.pointerId] = btn;
+      btn.classList.add('is-down'); buzz(18, zone);
+      sendKey(btn.getAttribute('data-btn'), true);
+    }
   });
-  dpad.addEventListener('pointermove', function (e) { if (e.pointerId === dpadPointer) setDir(dirFrom(e)); });
+  zone.addEventListener('pointermove', function (e) { if (e.pointerId === dpadPointer) setDir(dirFrom(e)); });
   ['pointerup', 'pointercancel', 'lostpointercapture'].forEach(function (t) {
-    dpad.addEventListener(t, function (e) { if (e.pointerId === dpadPointer) { dpadPointer = null; setDir(null); } });
+    zone.addEventListener(t, function (e) {
+      if (e.pointerId === dpadPointer) { dpadPointer = null; setDir(null); }
+      var btn = pressed[e.pointerId];
+      if (btn) { delete pressed[e.pointerId]; btn.classList.remove('is-down'); sendKey(btn.getAttribute('data-btn'), false); }
+    });
   });
 
-  // A / B: press and hold like a key (A = Space, B = Enter: both start and retry)
-  cabinet.querySelectorAll('[data-btn]').forEach(function (btn) {
-    var name = btn.getAttribute('data-btn');
-    btn.addEventListener('pointerdown', function (e) {
-      e.preventDefault();
-      if (!frame) { ensureGame(); return; }
-      ensureGame();
-      btn.classList.add('is-down'); buzz(18, btn);
-      try { btn.setPointerCapture(e.pointerId); } catch (err) { /* ignore */ }
-      sendKey(name, true);
-    });
-    ['pointerup', 'pointercancel', 'lostpointercapture'].forEach(function (t) {
-      btn.addEventListener(t, function () {
-        if (!btn.classList.contains('is-down')) return;
-        btn.classList.remove('is-down');
-        sendKey(name, false);
-      });
-    });
-  });
+  // No zooming while the console is open (iPhone Safari ignores most of the
+  // CSS for this): lock the viewport scale, which also resets any zoom, and
+  // block pinch / double-tap gestures on the console.
+  var viewport = document.querySelector('meta[name="viewport"]');
+  var viewportDefault = viewport ? viewport.getAttribute('content') : '';
+  function lockZoom(on) {
+    if (!viewport) return;
+    viewport.setAttribute('content', on
+      ? 'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover'
+      : viewportDefault);
+  }
+  function blockWhenOpen(e) { if (cabinet.classList.contains('is-open')) e.preventDefault(); }
+  ['gesturestart', 'gesturechange', 'gestureend', 'dblclick'].forEach(function (t) { cabinet.addEventListener(t, blockWhenOpen); });
+  cabinet.addEventListener('touchmove', blockWhenOpen, { passive: false });
+  cabinet.addEventListener('touchstart', function (e) { if (e.touches.length > 1) blockWhenOpen(e); }, { passive: false });
+  if (touch) cabinet.addEventListener('dblclick', function (e) { e.preventDefault(); });
 
   // Pills: Sound (mute toggle) and Restart; power switch closes
   function syncSoundPill() { soundPill.setAttribute('aria-pressed', String(!muted)); soundPill.classList.toggle('is-off', muted); }

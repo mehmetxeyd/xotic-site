@@ -68,3 +68,6 @@ html, body {
   color: #A39886;
 }
 #error .link { color: #EDE6D6; font-size: 18px; border-bottom: 3px solid #FF4B2B; text-decoration: none; padding-bottom: 4px; }
+
+/* touch: taps go to the game, never zoom the page */
+html, body, #unity-canvas { touch-action: manipulation; -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; -webkit-tap-highlight-color: transparent; }
